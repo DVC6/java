@@ -8,12 +8,12 @@ package Home;
  *
  * @author Regis
  */
-public class Login_Formulario extends javax.swing.JPanel {
+public class Login extends javax.swing.JPanel {
 
     /**
      * Creates new form Login_Formulario
      */
-    public Login_Formulario() {
+    public Login() {
         initComponents();
     }
 
