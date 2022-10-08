@@ -4,12 +4,14 @@
  */
 package Home;
 
+import Home.frames.FrameLogin;
+
 /**
  *
  * @author gabriel
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello");
+        FrameLogin login = new FrameLogin();
     }
 }
