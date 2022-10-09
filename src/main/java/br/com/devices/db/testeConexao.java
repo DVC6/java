@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  *
  * @author gabri
  */
-public class testeConexao {
+public class TesteConexao {
 
     public static void main(String[] args) {
         Conexao conexao = new Conexao();

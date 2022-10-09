@@ -18,6 +18,7 @@ public class FrameBemVindo extends javax.swing.JFrame {
     public FrameBemVindo() {
         initComponents();
         this.setResizable(false);
+        this.setLocationRelativeTo(null);
         this.looca = new Looca();
         this.setUpOs();
     }
