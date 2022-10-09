@@ -23,7 +23,6 @@ public class FrameLogin extends javax.swing.JFrame {
     public FrameLogin() {
         initComponents();
         this.setResizable(false);
-
     }
 
     /**
@@ -128,7 +127,7 @@ public class FrameLogin extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("EFETUAR LOGIN");
 
-        btnEntrar.setBackground(new java.awt.Color(121, 4, 25));
+        btnEntrar.setBackground(new java.awt.Color(125, 4, 25));
         btnEntrar.setForeground(new java.awt.Color(255, 255, 255));
         btnEntrar.setText("Entrar");
         btnEntrar.addActionListener(new java.awt.event.ActionListener() {
@@ -137,7 +136,7 @@ public class FrameLogin extends javax.swing.JFrame {
             }
         });
 
-        btnCadastrar.setBackground(new java.awt.Color(121, 4, 25));
+        btnCadastrar.setBackground(new java.awt.Color(125, 4, 25));
         btnCadastrar.setForeground(new java.awt.Color(255, 255, 255));
         btnCadastrar.setText("Cadastrar");
         btnCadastrar.setToolTipText("");
