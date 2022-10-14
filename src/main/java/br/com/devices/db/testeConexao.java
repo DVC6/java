@@ -11,17 +11,17 @@ import org.springframework.jdbc.core.JdbcTemplate;
  *
  * @author gabri
  */
-public class TesteConexao {
+//public class TesteConexao {
 
-    public static void main(String[] args) {
-        Conexao conexao = new Conexao();
-        JdbcTemplate conn = conexao.getConnection();
+  //  public static void main(String[] args) {
+    //    Conexao conexao = new Conexao();
+      //  JdbcTemplate conn = conexao.getConnection();
 
-        String insertTotem = "INSERT INTO dbo.totem VALUES ('SP', 'MQ-2', 'UP', 1);";
-        conn.update(insertTotem);
+        //String insertTotem = "INSERT INTO dbo.totem VALUES ('SP', 'MQ-2', 'UP', 1);";
+       // conn.update(insertTotem);
 
-        List totem = conn.queryForList("SELECT * FROM dbo.totem;");
+        //List totem = conn.queryForList("SELECT * FROM dbo.totem;");
 
-        System.out.println(totem);
-    }
-}
+        //System.out.println(totem);
+    //}
+//}
