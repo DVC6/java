@@ -1,11 +1,11 @@
-
 package br.com.devices.entities;
 
 public class HospitalEntity {
-    
+
     private Integer idHospital;
 
-    public HospitalEntity(){}
+    public HospitalEntity() {
+    }
 
     public Integer getIdHospital() {
         return idHospital;
@@ -19,4 +19,5 @@ public class HospitalEntity {
     public String toString() {
         return String.format("%s", idHospital);
     }
+
 }
