@@ -4,9 +4,10 @@
  */
 package br.com.devices.frames;
 
-import br.com.devices.entities.TotemEntity;
 import com.github.britooo.looca.api.core.Looca;
-import com.github.britooo.looca.api.group.sistema.Sistema;
+import com.github.britooo.looca.api.group.discos.DiscoGrupo;
+import com.github.britooo.looca.api.group.memoria.Memoria;
+import com.github.britooo.looca.api.group.processador.Processador;
 
 /**
  *
@@ -26,11 +27,13 @@ public class FrameBemVindo extends javax.swing.JFrame {
     
 
     public void setUpOs() {
-        Sistema sistema = looca.getSistema();
+        Memoria memoria = looca.getMemoria();
+        Processador processador = looca.getProcessador();
+        DiscoGrupo discosGroup = looca.getGrupoDeDiscos();
         
-        txtSistemaOperacional.setText(String.format("%s", sistema.getSistemaOperacional()));
-        txtFabricante.setText(String.format("%s", sistema.getFabricante()));
-        txtArquitetura.setText(String.format("%d bits", sistema.getArquitetura()));
+        txtCPU.setText(String.format("%s", processador.getNome()));
+        txtRAM.setText(String.format("%s", memoria.getTotal()));
+        txtDisco.setText(String.format("%d bits", discosGroup.getTamanhoTotal()));
     }
 
     @SuppressWarnings("unchecked")
@@ -40,11 +43,11 @@ public class FrameBemVindo extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblSistemaOperacional = new javax.swing.JLabel();
-        txtSistemaOperacional = new javax.swing.JLabel();
+        txtCPU = new javax.swing.JLabel();
         lblFabricante = new javax.swing.JLabel();
-        txtFabricante = new javax.swing.JLabel();
+        txtRAM = new javax.swing.JLabel();
         lblArquitetura = new javax.swing.JLabel();
-        txtArquitetura = new javax.swing.JLabel();
+        txtDisco = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnVoltarParaLogin = new javax.swing.JButton();
@@ -61,27 +64,27 @@ public class FrameBemVindo extends javax.swing.JFrame {
 
         lblSistemaOperacional.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
         lblSistemaOperacional.setForeground(new java.awt.Color(255, 255, 255));
-        lblSistemaOperacional.setText("Sistema Operacional");
+        lblSistemaOperacional.setText("CPU:");
 
-        txtSistemaOperacional.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-        txtSistemaOperacional.setForeground(new java.awt.Color(255, 255, 255));
-        txtSistemaOperacional.setText("--");
+        txtCPU.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        txtCPU.setForeground(new java.awt.Color(255, 255, 255));
+        txtCPU.setText("--");
 
         lblFabricante.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
         lblFabricante.setForeground(new java.awt.Color(255, 255, 255));
-        lblFabricante.setText("Fabricante:");
+        lblFabricante.setText("Memoria RAM:");
 
-        txtFabricante.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-        txtFabricante.setForeground(new java.awt.Color(255, 255, 255));
-        txtFabricante.setText("--");
+        txtRAM.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        txtRAM.setForeground(new java.awt.Color(255, 255, 255));
+        txtRAM.setText("--");
 
         lblArquitetura.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
         lblArquitetura.setForeground(new java.awt.Color(255, 255, 255));
-        lblArquitetura.setText("Arquitetura:");
+        lblArquitetura.setText("Disco:");
 
-        txtArquitetura.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-        txtArquitetura.setForeground(new java.awt.Color(255, 255, 255));
-        txtArquitetura.setText("--");
+        txtDisco.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        txtDisco.setForeground(new java.awt.Color(255, 255, 255));
+        txtDisco.setText("--");
 
         jLabel2.setBackground(new java.awt.Color(255, 255, 255));
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -119,9 +122,9 @@ public class FrameBemVindo extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtFabricante, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtSistemaOperacional, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtArquitetura, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtRAM, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtCPU, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtDisco, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addContainerGap(89, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -140,15 +143,15 @@ public class FrameBemVindo extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblSistemaOperacional)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtSistemaOperacional)
+                        .addComponent(txtCPU)
                         .addGap(26, 26, 26)
                         .addComponent(lblFabricante)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFabricante)
+                        .addComponent(txtRAM)
                         .addGap(30, 30, 30)
                         .addComponent(lblArquitetura)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtArquitetura)
+                        .addComponent(txtDisco)
                         .addGap(18, 18, 18)
                         .addComponent(btnVoltarParaLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel4))
@@ -210,8 +213,8 @@ public class FrameBemVindo extends javax.swing.JFrame {
     private javax.swing.JLabel lblArquitetura;
     private javax.swing.JLabel lblFabricante;
     private javax.swing.JLabel lblSistemaOperacional;
-    private javax.swing.JLabel txtArquitetura;
-    private javax.swing.JLabel txtFabricante;
-    private javax.swing.JLabel txtSistemaOperacional;
+    private javax.swing.JLabel txtCPU;
+    private javax.swing.JLabel txtDisco;
+    private javax.swing.JLabel txtRAM;
     // End of variables declaration//GEN-END:variables
 }

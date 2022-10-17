@@ -1,11 +1,8 @@
 br\com\devices\frames\FrameLogin$5.class
 br\com\devices\methods\TesteVinculo.class
 br\com\devices\frames\FrameLogin$4.class
-br\com\devices\frames\FrameBemVindo$1.class
-br\com\devices\frames\FrameBemVindo.class
 br\com\devices\frames\FramePopUp$1.class
 br\com\devices\frames\FramePopUp.class
-br\com\devices\frames\FrameBemVindo$2.class
 br\com\devices\frames\FrameLogin$1.class
 br\com\devices\entities\HospitalEntity.class
 br\com\devices\db\Conexao.class

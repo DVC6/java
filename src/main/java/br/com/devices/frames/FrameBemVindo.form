@@ -62,9 +62,9 @@
                               <Group type="102" attributes="0">
                                   <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtFabricante" alignment="0" min="-2" pref="202" max="-2" attributes="0"/>
-                                      <Component id="txtSistemaOperacional" alignment="0" min="-2" pref="231" max="-2" attributes="0"/>
-                                      <Component id="txtArquitetura" min="-2" pref="168" max="-2" attributes="0"/>
+                                      <Component id="txtRAM" alignment="0" min="-2" pref="202" max="-2" attributes="0"/>
+                                      <Component id="txtCPU" alignment="0" min="-2" pref="231" max="-2" attributes="0"/>
+                                      <Component id="txtDisco" min="-2" pref="168" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -91,15 +91,15 @@
                       <Group type="102" attributes="0">
                           <Component id="lblSistemaOperacional" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtSistemaOperacional" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtCPU" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           <Component id="lblFabricante" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtFabricante" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtRAM" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                           <Component id="lblArquitetura" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtArquitetura" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtDisco" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnVoltarParaLogin" min="-2" pref="31" max="-2" attributes="0"/>
                       </Group>
@@ -133,10 +133,10 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Sistema Operacional"/>
+            <Property name="text" type="java.lang.String" value="CPU:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="txtSistemaOperacional">
+        <Component class="javax.swing.JLabel" name="txtCPU">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Monospaced" size="24" style="0"/>
@@ -155,10 +155,10 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Fabricante:"/>
+            <Property name="text" type="java.lang.String" value="Memoria RAM:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="txtFabricante">
+        <Component class="javax.swing.JLabel" name="txtRAM">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Monospaced" size="24" style="0"/>
@@ -177,10 +177,10 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Arquitetura:"/>
+            <Property name="text" type="java.lang.String" value="Disco:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="txtArquitetura">
+        <Component class="javax.swing.JLabel" name="txtDisco">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Monospaced" size="24" style="0"/>

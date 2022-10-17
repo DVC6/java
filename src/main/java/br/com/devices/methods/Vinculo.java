@@ -2,6 +2,10 @@ package br.com.devices.methods;
 
 import br.com.devices.db.Conexao;
 import br.com.devices.entities.HospitalEntity;
+import com.github.britooo.looca.api.core.Looca;
+import com.github.britooo.looca.api.group.discos.DiscoGrupo;
+import com.github.britooo.looca.api.group.memoria.Memoria;
+import com.github.britooo.looca.api.group.processador.Processador;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -16,6 +20,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class Vinculo {
 
     public String Vincular(String cnpj, String id, String local) throws FileNotFoundException, IOException {
+        Looca looca = new Looca();
+        Memoria memoria = looca.getMemoria();
+        Processador processador = looca.getProcessador();
+        DiscoGrupo discosGroup = looca.getGrupoDeDiscos();
         Conexao conexao = new Conexao();
         JdbcTemplate connection = conexao.getConnection();
         List<HospitalEntity> hospital
@@ -30,6 +38,14 @@ public class Vinculo {
             List<Map<String, Object>> totem
                     = (connection.queryForList("SELECT TOP 1 id_totem FROM [dbo].[totem] ORDER BY id_totem DESC"));
             String idTotem = totem.get(0).get("id_totem").toString();
+            
+            connection.execute(String.format("INSERT INTO [dbo].[componente]"
+                    + "(total_componente, fktipocomponente, fktotem) VALUES"
+                    + "('%s', %d, %s),"
+                    + "('%s', %d, %s),"
+                    + "('%s', %d, %s)", processador.getNome(), 1, idTotem,
+                    memoria.getTotal(), 2, idTotem,
+                    discosGroup.getTamanhoTotal(), 3, idTotem));
 
             FileOutputStream arq = new FileOutputStream("C:cache.dat");
             DataOutputStream gravarArq = new DataOutputStream(arq);
