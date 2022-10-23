@@ -24,6 +24,13 @@ public class Conexao {
         datasource.setPassword("d3v1c6-password");
 
         connection = new JdbcTemplate(datasource);
+
+//  Preparado para MySQL no Docker        
+//        dataSource = new BasicDataSource();
+//        dataSource​.setDriverClassName("com.mysql.cj.jdbc.Driver");
+//        dataSource​.setUrl("jdbc:mysql://0.0.0.0:3306/banco1?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
+//        dataSource​.setUsername("root");
+//        dataSource​.setPassword("urubu100");
     }
 
     public JdbcTemplate getConnection() {

@@ -62,7 +62,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>br.com.devices.frames.FrameLogin</mainClass>
+                            <mainClass>br.com.devices.app.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
