@@ -1,0 +1,219 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package br.com.devices.frames;
+
+import com.github.britooo.looca.api.core.Looca;
+import com.github.britooo.looca.api.group.discos.DiscoGrupo;
+import com.github.britooo.looca.api.group.memoria.Memoria;
+import com.github.britooo.looca.api.group.processador.Processador;
+
+/**
+ *
+ * @author gabri
+ */
+public class FrameBemVindo extends javax.swing.JFrame {
+
+    Looca looca;
+
+    public FrameBemVindo() {
+        initComponents();
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
+        this.looca = new Looca();
+        this.setUpOs();
+    }
+    
+
+    public void setUpOs() {
+        Memoria memoria = looca.getMemoria();
+        Processador processador = looca.getProcessador();
+        DiscoGrupo discosGroup = looca.getGrupoDeDiscos();
+        
+        txtCPU.setText(String.format("%s", processador.getNome()));
+        txtRAM.setText(String.format("%s", memoria.getTotal()));
+        txtDisco.setText(String.format("%d bits", discosGroup.getTamanhoTotal()));
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        lblSistemaOperacional = new javax.swing.JLabel();
+        txtCPU = new javax.swing.JLabel();
+        lblFabricante = new javax.swing.JLabel();
+        txtRAM = new javax.swing.JLabel();
+        lblArquitetura = new javax.swing.JLabel();
+        txtDisco = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        btnVoltarParaLogin = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(125, 4, 45));
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Monospaced", 1, 48)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Bem-Vindo(a)");
+
+        lblSistemaOperacional.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
+        lblSistemaOperacional.setForeground(new java.awt.Color(255, 255, 255));
+        lblSistemaOperacional.setText("CPU:");
+
+        txtCPU.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        txtCPU.setForeground(new java.awt.Color(255, 255, 255));
+        txtCPU.setText("--");
+
+        lblFabricante.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
+        lblFabricante.setForeground(new java.awt.Color(255, 255, 255));
+        lblFabricante.setText("Memoria RAM:");
+
+        txtRAM.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        txtRAM.setForeground(new java.awt.Color(255, 255, 255));
+        txtRAM.setText("--");
+
+        lblArquitetura.setFont(new java.awt.Font("Monospaced", 1, 18)); // NOI18N
+        lblArquitetura.setForeground(new java.awt.Color(255, 255, 255));
+        lblArquitetura.setText("Disco:");
+
+        txtDisco.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        txtDisco.setForeground(new java.awt.Color(255, 255, 255));
+        txtDisco.setText("--");
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Ola, espero que goste dos nossos serviços. Segue abaixo algumas informaçôes do seu hardware que já identificamos para você");
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/logo2.png"))); // NOI18N
+
+        btnVoltarParaLogin.setBackground(new java.awt.Color(125, 4, 25));
+        btnVoltarParaLogin.setForeground(new java.awt.Color(255, 255, 255));
+        btnVoltarParaLogin.setText("Voltar para login");
+        btnVoltarParaLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarParaLoginActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnVoltarParaLogin)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(54, 54, 54))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblArquitetura, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblFabricante, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblSistemaOperacional, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtCPU, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)
+                                    .addComponent(txtRAM, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtDisco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(89, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(204, 204, 204))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addGap(41, 41, 41)
+                .addComponent(lblSistemaOperacional)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtCPU)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(lblFabricante)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtRAM)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(lblArquitetura)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtDisco)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnVoltarParaLogin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnVoltarParaLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarParaLoginActionPerformed
+        this.setVisible(false);
+        new FrameLogin().setVisible(true);
+    }//GEN-LAST:event_btnVoltarParaLoginActionPerformed
+
+    public static void main(String args[]) {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(FrameBemVindo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(FrameBemVindo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(FrameBemVindo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(FrameBemVindo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new FrameBemVindo().setVisible(true);
+            }
+        });
+    }
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnVoltarParaLogin;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblArquitetura;
+    private javax.swing.JLabel lblFabricante;
+    private javax.swing.JLabel lblSistemaOperacional;
+    private javax.swing.JLabel txtCPU;
+    private javax.swing.JLabel txtDisco;
+    private javax.swing.JLabel txtRAM;
+    // End of variables declaration//GEN-END:variables
+}
