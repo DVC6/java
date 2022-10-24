@@ -24,7 +24,10 @@ public class FrameLogin extends javax.swing.JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
     }
-
+    
+    public void startupJframe() {
+        autoLogin();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -264,8 +267,8 @@ public class FrameLogin extends javax.swing.JFrame {
     // Tentar rodar APOS inicializacao
     public void autoLogin() {
         try {
-            Thread.sleep(1000);
-            FileInputStream arq = new FileInputStream("C:cache.dat");
+            String filePath = String.format("C:\\Users\\%s\\AppData\\Roaming\\D3V1C6\\cache.dat", System.getProperty("user.name"));
+            FileInputStream arq = new FileInputStream(filePath);
             DataInputStream lerArq = new DataInputStream(arq);
             String idTotem = lerArq.readUTF();
             System.out.println(idTotem);
@@ -274,11 +277,9 @@ public class FrameLogin extends javax.swing.JFrame {
                 this.setVisible(false);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Link failed");
+            e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("Link failed");
-        } catch (InterruptedException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 

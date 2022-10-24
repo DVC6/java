@@ -46,8 +46,9 @@ public class Vinculo {
                     + "('%s', %d, %s)", processador.getNome(), 1, idTotem,
                     memoria.getTotal(), 2, idTotem,
                     discosGroup.getTamanhoTotal(), 3, idTotem));
-
-            FileOutputStream arq = new FileOutputStream("C:cache.dat");
+            
+            String filePath = String.format("C:\\Users\\%s\\AppData\\Roaming\\D3V1C6\\cache.dat", System.getProperty("user.name"));
+            FileOutputStream arq = new FileOutputStream(filePath);
             DataOutputStream gravarArq = new DataOutputStream(arq);
 
             gravarArq.writeUTF(idTotem);
@@ -64,7 +65,8 @@ public class Vinculo {
     }
 
     public Boolean isAlreadyVinculado() throws FileNotFoundException, IOException {
-        FileInputStream arqRead = new FileInputStream("C:cache.dat");
+        String filePath = String.format("C:\\Users\\%s\\AppData\\Roaming\\D3V1C6\\cache.dat", System.getProperty("user.name"));
+        FileInputStream arqRead = new FileInputStream(filePath);
         DataInputStream lerArq = new DataInputStream(arqRead);
         
         String fkTotem = lerArq.readUTF();

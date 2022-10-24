@@ -14,11 +14,6 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>AbsoluteLayout</artifactId>
-            <version>SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>5.0.5.RELEASE</version>
@@ -62,7 +57,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>br.com.devices.frames.FrameLogin</mainClass>
+                            <mainClass>br.com.devices.methods.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
