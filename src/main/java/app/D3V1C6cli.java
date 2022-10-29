@@ -21,13 +21,13 @@ public class D3V1C6cli {
     Integer contadorDisco = 0;
     Boolean contadorDiscoRodando = false;
 
-    Logger logger = Logger.getLogger("CodeSafeCLI");
+    Logger logger = Logger.getLogger("D3V1C6cli");
     FileHandler fh;
 
     public void rodarCodeSafe(Insersor insersor) {
 
         try {
-            fh = new FileHandler("../CodeSafeCLILog.log");
+            fh = new FileHandler("../D3V1C6cliLog.log");
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);

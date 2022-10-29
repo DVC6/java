@@ -17,6 +17,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -41,7 +42,7 @@ public class FrameLogin extends javax.swing.JFrame {
         this.ativarSQL = ativarSQL;
     }
 
-    public FrameLogin() {
+    public FrameLogin() throws InterruptedException {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -54,6 +55,8 @@ public class FrameLogin extends javax.swing.JFrame {
         } catch (Exception e) {
             logger.severe("Erro ao inicializar log em txt");
         }
+
+        autoLogin();
     }
 
     /**
@@ -164,7 +167,7 @@ public class FrameLogin extends javax.swing.JFrame {
 
         txtId.setBackground(new java.awt.Color(230, 230, 230));
         txtId.setForeground(new java.awt.Color(0, 0, 0));
-        txtId.setToolTipText("Insira um identificador para a máquina");
+        txtId.setToolTipText("Insira seu email");
         txtId.setBorder(null);
         txtId.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtId.addActionListener(new java.awt.event.ActionListener() {
@@ -304,7 +307,7 @@ public class FrameLogin extends javax.swing.JFrame {
             List buscarNomeTotem = template.queryForList("SELECT * FROM totem "
                     + "WHERE nome_maquina = '" + nomeMaquina + "'");
             if (!buscarNomeTotem.isEmpty()) {
-                logger.info("Inicial - Servidor encontrado no banco de dados. Habilitando tela de login.");
+                logger.info("Inicial - Totem encontrado no banco de dados. Habilitando tela de login.");
                 exibirD3V1C6gui();
             }
         } catch (UnknownHostException ex) {
@@ -315,11 +318,15 @@ public class FrameLogin extends javax.swing.JFrame {
         }
     }
 
-    private void exibirD3V1C6gui() {
+    private void exibirD3V1C6gui() throws InterruptedException, IOException {
+
+        Thread.sleep(1000);
+        this.setVisible(false);
+        Thread.sleep(1000);
+
         FrameBemVindo telaD3V1C6gui = new FrameBemVindo();
         telaD3V1C6gui.setAtivarSQL(ativarSQL);
         telaD3V1C6gui.setVisible(true);
-        this.setVisible(false);
     }
 
     public void confimarLogin() {
@@ -344,7 +351,7 @@ public class FrameLogin extends javax.swing.JFrame {
             BigDecimal totalVolume = new BigDecimal(discoTotal.doubleValue() / 1e+9).setScale(0, RoundingMode.HALF_EVEN);
 
             HospitalEntity hospitalTeste = new HospitalEntity();
-            List<HospitalEntity> buscaHospital = template.query("SELECT * FROM empresa WHERE chave_acesso = ?",
+            List<HospitalEntity> buscaHospital = template.query("SELECT * FROM hospital WHERE chave_acesso = ?",
                     new BeanPropertyRowMapper<>(HospitalEntity.class), chaveDigitada);
             for (HospitalEntity hospital : buscaHospital) {
                 idHospital = hospital.getIdHospital().toString();
@@ -465,7 +472,11 @@ public class FrameLogin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrameLogin().setVisible(true);
+                try {
+                    new FrameLogin().setVisible(true);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(FrameLogin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

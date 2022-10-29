@@ -117,7 +117,7 @@ public class Coletor {
                     new BeanPropertyRowMapper<>(TotemEntity.class), InetAddress.getLocalHost().getHostName());
             for (TotemEntity totem : buscaServidor) {
                 ComponenteEntity componenteTeste = new ComponenteEntity();
-                List<ComponenteEntity> buscaComponente = template.query("SELECT * FROM componente WHERE fkTotem = ? AND tipo = ?",
+                List<ComponenteEntity> buscaComponente = template.query("SELECT * FROM componente WHERE fkTotem = ? AND fktipocomponente = ?",
                         new BeanPropertyRowMapper<>(ComponenteEntity.class), totem.getIdTotem(), tipoComponente);
                 for (ComponenteEntity componente : buscaComponente) {
                     idComponenteCorreto = componente.getIdComponente();
@@ -169,7 +169,7 @@ public class Coletor {
                 + "|Componente |  Total    |  Uso    |\n"
                 + "|RAM:       |  %s GB  |  %s%% |\n"
                 + "|CPU:       |  %s GHz |  %s%% |\n"
-                + "|Disco:     |   %s GB  |  %s%% |",
+                + "|Disco:     |   %s GB  |  %s%%    |",
                 serverRAM, atualRAM, serverCPU, atualCPU, serverDisco, atualDisco);
     }
 

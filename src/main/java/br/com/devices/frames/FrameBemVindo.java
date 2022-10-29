@@ -15,6 +15,7 @@ import java.net.UnknownHostException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import org.json.JSONObject;
@@ -46,11 +47,11 @@ public class FrameBemVindo extends javax.swing.JFrame {
         this.ativarSQL = ativarSQL;
     }
 
-    public FrameBemVindo() {
+    public FrameBemVindo() throws IOException, InterruptedException {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setUpOs();
+        setAlwaysOnTop(true);
 
         try {
             fh = new FileHandler("../D3V1C6.log");
@@ -62,7 +63,7 @@ public class FrameBemVindo extends javax.swing.JFrame {
         }
 
         try {
-            jLabel1.setText(InetAddress.getLocalHost().getHostName());
+            lblNomeServidor.setText(InetAddress.getLocalHost().getHostName());
             this.setUpOs();
         } catch (UnknownHostException ex) {
             logger.severe(String.format("Erro no setUpOs: %s", ex));
@@ -114,11 +115,11 @@ public class FrameBemVindo extends javax.swing.JFrame {
         lblTotalDisco.setText(totalDisco.toString() + " GB");
 
     }
-    
+
     private void exibicaoCLI() {
         System.out.println(coletor);
     }
-    
+
     private void contadorAlerta() throws IOException, InterruptedException {
         if (contadorRAMRodando) {
             contadorRAM++;
@@ -155,7 +156,7 @@ public class FrameBemVindo extends javax.swing.JFrame {
         }
 
     }
-    
+
     private void rodarD3V1C6() {
 
         insersor.setAtivarSQL(ativarSQL);
@@ -184,7 +185,7 @@ public class FrameBemVindo extends javax.swing.JFrame {
             lblExibeCPU.setForeground(Color.green);
         }
     }
-    
+
     private void rodarD3V1C6disco() {
 
         insersor.setAtivarSQL(ativarSQL);
@@ -312,7 +313,6 @@ public class FrameBemVindo extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -343,14 +343,20 @@ public class FrameBemVindo extends javax.swing.JFrame {
                                 .addComponent(txtRAM7, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(32, 32, 32)
                                 .addComponent(lblTotalDisco, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                                 .addComponent(lblNomeServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel4))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(22, 22, 22))
+                                .addComponent(jLabel4)
+                                .addGap(54, 54, 54))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1)
+                                .addContainerGap())))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(22, 22, 22))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -406,7 +412,9 @@ public class FrameBemVindo extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -437,7 +445,13 @@ public class FrameBemVindo extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrameBemVindo().setVisible(true);
+                try {
+                    new FrameBemVindo().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(FrameBemVindo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(FrameBemVindo.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
