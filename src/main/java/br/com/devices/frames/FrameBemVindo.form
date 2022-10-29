@@ -61,19 +61,19 @@
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Component id="txtRAM2" min="-2" pref="38" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                              <Component id="lblTotalCPU" min="-2" pref="96" max="-2" attributes="0"/>
+                                              <Component id="lblTotalCPU" min="-2" pref="126" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" attributes="0">
                                               <Component id="lblExibeRAM" min="-2" pref="105" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
                                               <Component id="txtRAM4" min="-2" pref="38" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                              <Component id="lblTotalRAM" min="-2" pref="96" max="-2" attributes="0"/>
+                                              <Component id="lblTotalRAM" min="-2" pref="131" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="txtRAM6" min="-2" pref="65" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="lblFabricante" alignment="0" max="32767" attributes="0"/>
                                   <Component id="lblSistemaOperacional" alignment="0" max="32767" attributes="0"/>
@@ -84,7 +84,7 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="txtRAM7" min="-2" pref="38" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                  <Component id="lblTotalDisco" min="-2" pref="96" max="-2" attributes="0"/>
+                                  <Component id="lblTotalDisco" min="-2" pref="116" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
