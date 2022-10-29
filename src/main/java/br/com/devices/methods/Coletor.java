@@ -6,7 +6,7 @@ import br.com.devices.entities.LeituraEntity;
 import br.com.devices.entities.TotemEntity;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.Disco;
-import com.github.britooo.looca.api.group.discos.DiscosGroup;
+import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.discos.Volume;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -28,7 +28,7 @@ public class Coletor {
     // CONEXÃO LOOCA
     Looca looca = new Looca();
     // Gerenciar Grupo de Discos
-    DiscosGroup grupoDeDiscos = looca.getGrupoDeDiscos();
+    DiscoGrupo grupoDeDiscos = looca.getGrupoDeDiscos();
     List<com.github.britooo.looca.api.group.discos.Disco> discos = grupoDeDiscos.getDiscos();
     
     Logger logger = Logger.getLogger("Coletor");
@@ -56,13 +56,10 @@ public class Coletor {
     // RAM
     public LeituraEntity coletarRAM() {
         LeituraEntity registroRAM = new LeituraEntity(identificarComponente(2));
-//        registroRAM.setUnidadeMedida("GB");
         BigDecimal consumoRAM = new BigDecimal(looca.getMemoria().getEmUso().doubleValue() / 1073741824).setScale(2, RoundingMode.HALF_EVEN);
-        registroRAM.setConsumo(consumoRAM.doubleValue());
         BigDecimal totalRAM = new BigDecimal(looca.getMemoria().getTotal().doubleValue() / 1073741824).setScale(2, RoundingMode.HALF_EVEN);
-        registroRAM.setTotal(totalRAM.doubleValue());
-        BigDecimal percentualConsumoRAM = new BigDecimal((registroRAM.getConsumo() * 100) / registroRAM.getTotal()).setScale(2, RoundingMode.HALF_EVEN);
-        registroRAM.setPercentualConsumo(percentualConsumoRAM.doubleValue());
+        BigDecimal percentualConsumoRAM = new BigDecimal((consumoRAM.doubleValue() * 100) / totalRAM.doubleValue()).setScale(2, RoundingMode.HALF_EVEN);
+        registroRAM.setConsumo(percentualConsumoRAM.doubleValue());
         this.atualRAM = (percentualConsumoRAM).toString();
         this.serverRAM = (totalRAM).toString();
         return registroRAM;
@@ -73,13 +70,9 @@ public class Coletor {
     // CPU
     public LeituraEntity coletarCPU() {
         LeituraEntity registroCPU = new LeituraEntity(identificarComponente(1));
-        registroCPU.setUnidadeMedida("GHz");
         BigDecimal totalCPU = new BigDecimal(looca.getProcessador().getFrequencia() / 1e+9).setScale(2, RoundingMode.HALF_EVEN);
-        registroCPU.setTotal(totalCPU.doubleValue());
         BigDecimal percentualCPU = new BigDecimal(looca.getProcessador().getUso()).setScale(2, RoundingMode.HALF_EVEN);
-        registroCPU.setPercentualConsumo(percentualCPU.doubleValue());
-        BigDecimal consumoCPU = new BigDecimal((registroCPU.getTotal() * registroCPU.getPercentualConsumo()) / 100).setScale(2, RoundingMode.HALF_EVEN);
-        registroCPU.setConsumo(consumoCPU.doubleValue());
+        registroCPU.setConsumo(percentualCPU.doubleValue());
         this.atualCPU = (percentualCPU).toString();
         this.serverCPU = (totalCPU).toString();
         return registroCPU;
@@ -103,13 +96,10 @@ public class Coletor {
 //        System.out.println(discoTotal);
 //        System.out.println(discoConsumido);
         LeituraEntity registroDISCO = new LeituraEntity(identificarComponente(3));
-        registroDISCO.setUnidadeMedida("GB");
         BigDecimal totalVolume = new BigDecimal(discoTotal.doubleValue() / 1e+9).setScale(0, RoundingMode.HALF_EVEN);
-        registroDISCO.setTotal(totalVolume.doubleValue());
         BigDecimal consumoDisco = new BigDecimal(discoConsumido / 1e+9).setScale(2, RoundingMode.HALF_EVEN);
-        registroDISCO.setConsumo(consumoDisco.doubleValue());
-        BigDecimal percentualDisco = new BigDecimal((registroDISCO.getConsumo() * 100) / registroDISCO.getTotal()).setScale(0, RoundingMode.HALF_EVEN);
-        registroDISCO.setPercentualConsumo(percentualDisco.doubleValue());
+        BigDecimal percentualDisco = new BigDecimal((consumoDisco.doubleValue() * 100) / totalVolume.doubleValue()).setScale(0, RoundingMode.HALF_EVEN);
+        registroDISCO.setConsumo(percentualDisco.doubleValue());
         this.atualDisco = (percentualDisco).toString();
         this.serverDisco = (totalVolume).toString();
         return registroDISCO;

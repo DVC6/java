@@ -3,6 +3,7 @@ package app;
 import br.com.devices.db.Connection;
 import br.com.devices.entities.HospitalEntity;
 import br.com.devices.entities.TotemEntity;
+import br.com.devices.frames.FrameLogin;
 import br.com.devices.methods.Insersor;
 import com.github.britooo.looca.api.core.Looca;
 import java.io.IOException;
@@ -16,7 +17,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import org.json.JSONObject;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -62,7 +62,7 @@ public class App {
 
             switch (modoSelecionado) {
                 case 1:
-                    new TelaInicial().setVisible(true);
+                    new FrameLogin().setVisible(true);
                     menuLoop = false;
                     break;
 ////////////////////////////////////////////////////////////////////////////////                    
@@ -80,7 +80,7 @@ public class App {
                         List buscarNomeTotem = template.queryForList("SELECT * FROM totem "
                                 + "WHERE nome_maquina = '" + nomeMaquina + "'");
                         if (!buscarNomeTotem.isEmpty()) {
-                            System.out.println("Servidor já cadastrado..."
+                            System.out.println("Totem já cadastrado..."
                                     + "\nRedirecionando...");
 
                         } else {
@@ -189,7 +189,7 @@ public class App {
 
                 case 3:
                     insersor.setAtivarSQL(true);
-                    TelaInicial telaInicial = new TelaInicial();
+                    FrameLogin telaInicial = new FrameLogin();
                     telaInicial.setAtivarSQL(true);
                     telaInicial.setVisible(true);
 //                    new TelaInicial().setVisible(true);

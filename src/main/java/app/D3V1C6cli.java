@@ -1,5 +1,6 @@
 package app;
 
+import br.com.devices.methods.Coletor;
 import br.com.devices.methods.Insersor;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -87,23 +88,24 @@ public class D3V1C6cli {
                     if (contadorRAM == 36) {
                         json.put("text", "Alerta no servidor: " + nomeServidor
                                 + "\nAlerta de RAM :heavy_exclamation_mark: // Possível Atividade Suspeita :heavy_exclamation_mark:");
-                        Slack.enviarMensagem(json);
+//                        Slack.enviarMensagem(json);
                     }
                     if (contadorCPU == 36) {
                         json.put("text", "Alerta no servidor: " + nomeServidor
                                 + "\nAlerta de CPU :heavy_exclamation_mark: // Possível Atividade Suspeita :heavy_exclamation_mark:");
-                        Slack.enviarMensagem(json);
+//                        Slack.enviarMensagem(json);
                     }
                     if (contadorDisco == 36) {
                         json.put("text", "Alerta no servidor: " + nomeServidor
                                 + "\nAlerta de Disco :heavy_exclamation_mark: // Uso de volume acima de 90% da capacidade total :heavy_exclamation_mark:");
-                        Slack.enviarMensagem(json);
+//                        Slack.enviarMensagem(json);
                     }
                 } catch (IOException ex) {
                     logger.severe("Erro ao verificar contadores.");
-                } catch (InterruptedException ex) {
-                    logger.severe("Erro ao verificar contadores.");
                 }
+//                } catch (InterruptedException ex) {
+//                    logger.severe("Erro ao verificar contadores.");
+//                }
 
             }
         }, delay, interval);

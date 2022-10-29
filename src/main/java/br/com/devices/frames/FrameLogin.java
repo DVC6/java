@@ -1,28 +1,59 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package br.com.devices.frames;
 
+import br.com.devices.db.Connection;
+import br.com.devices.entities.HospitalEntity;
+import br.com.devices.entities.TotemEntity;
 import br.com.devices.methods.Vinculo;
 import com.github.britooo.looca.api.core.Looca;
+import com.github.britooo.looca.api.group.discos.DiscoGrupo;
+import com.github.britooo.looca.api.group.discos.Volume;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-/**
- *
- * @author Regis
- */
 public class FrameLogin extends javax.swing.JFrame {
 
-    Looca looca;
+    FileHandler fh;
+    Logger logger = Logger.getLogger("InicialLogger");
+
+    Connection config = new Connection("Azure");
+    JdbcTemplate template = new JdbcTemplate(config.getDataSource());
+    Looca looca = new Looca();
+
+    private Boolean ativarSQL = false;
+
+    public Boolean getAtivarSQL() {
+        return ativarSQL;
+    }
+
+    public void setAtivarSQL(Boolean ativarSQL) {
+        this.ativarSQL = ativarSQL;
+    }
 
     public FrameLogin() {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
+
+        try {
+            fh = new FileHandler("../InicialLog.log");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+        } catch (Exception e) {
+            logger.severe("Erro ao inicializar log em txt");
+        }
     }
 
     /**
@@ -158,7 +189,7 @@ public class FrameLogin extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -263,54 +294,128 @@ public class FrameLogin extends javax.swing.JFrame {
 
     // Tentar rodar APOS inicializacao
     public void autoLogin() {
+
+        String nomeMaquina;
+
         try {
-            Thread.sleep(1000);
-            FileInputStream arq = new FileInputStream("C:cache.dat");
-            DataInputStream lerArq = new DataInputStream(arq);
-            String idTotem = lerArq.readUTF();
-            System.out.println(idTotem);
-            if (idTotem != null) {
-                new FrameBemVindo().setVisible(true);
-                this.setVisible(false);
+            nomeMaquina = InetAddress.getLocalHost().getHostName();
+            logger.info("Inicial - Buscando nome da máquina atual no banco de dados");
+
+            List buscarNomeTotem = template.queryForList("SELECT * FROM totem "
+                    + "WHERE nome_maquina = '" + nomeMaquina + "'");
+            if (!buscarNomeTotem.isEmpty()) {
+                logger.info("Inicial - Servidor encontrado no banco de dados. Habilitando tela de login.");
+                exibirD3V1C6gui();
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Link failed");
-        } catch (IOException e) {
-            System.out.println("Link failed");
-        } catch (InterruptedException e) {
-            System.out.println(e);
+        } catch (UnknownHostException ex) {
+            // MENSAGEM PARA LOG
+            logger.severe(String.format("Inicial - Erro ao buscar hostname: %s", ex.toString()));
+        } catch (Exception ex) {
+            logger.severe("Inicial - Erro ao conectar com banco de dados");
         }
     }
+
+    private void exibirD3V1C6gui() {
+        FrameBemVindo telaD3V1C6gui = new FrameBemVindo();
+        telaD3V1C6gui.setAtivarSQL(ativarSQL);
+        telaD3V1C6gui.setVisible(true);
+        this.setVisible(false);
+    }
+
+    public void confimarLogin() {
+        String chaveDigitada = txtChave.getText();
+        String id = txtId.getText();
+        String local = txtLocal.getText();
+
+        String idHospital = null;
+        String nomeMaquina;
+
+        try {
+            nomeMaquina = InetAddress.getLocalHost().getHostName();
+            BigDecimal totalCPU = new BigDecimal(looca.getProcessador().getFrequencia() / 1e+9).setScale(2, RoundingMode.HALF_EVEN);
+            BigDecimal totalRAM = new BigDecimal(looca.getMemoria().getTotal().doubleValue() / 1073741824).setScale(2, RoundingMode.HALF_EVEN);
+
+            DiscoGrupo grupoDeDiscos = looca.getGrupoDeDiscos();
+            List<Volume> volumes = grupoDeDiscos.getVolumes();
+            Double discoTotal = 0.0;
+            for (Volume volume : volumes) {
+                discoTotal += volume.getTotal().doubleValue();
+            }
+            BigDecimal totalVolume = new BigDecimal(discoTotal.doubleValue() / 1e+9).setScale(0, RoundingMode.HALF_EVEN);
+
+            HospitalEntity hospitalTeste = new HospitalEntity();
+            List<HospitalEntity> buscaHospital = template.query("SELECT * FROM empresa WHERE chave_acesso = ?",
+                    new BeanPropertyRowMapper<>(HospitalEntity.class), chaveDigitada);
+            for (HospitalEntity hospital : buscaHospital) {
+                idHospital = hospital.getIdHospital().toString();
+            }
+            if (buscaHospital.isEmpty()) {
+                logger.severe("Erro - CNPJ não encontrado");
+            } else {
+                String insertStatement = "INSERT INTO totem VALUES (?, ?, ?, ?)";
+                template.update(insertStatement, nomeMaquina, "OK", idHospital, local);
+                TotemEntity totemTeste = new TotemEntity();
+                List<TotemEntity> buscaTotem = template.query("SELECT * FROM totem WHERE nome_maquina = ?",
+                        new BeanPropertyRowMapper<>(TotemEntity.class), nomeMaquina);
+                for (TotemEntity totem : buscaTotem) {
+                    // Total / fkTipoComponente / fkTotem / fkMetricas
+                    String insertStatement2 = "INSERT INTO componente VALUES (?, ?, ?, ?)";
+                    template.update(insertStatement2,
+                            totalCPU,
+                            1,
+                            totem.getIdTotem(),
+                            1);
+                    template.update(insertStatement2,
+                            totalRAM,
+                            2,
+                            totem.getIdTotem(),
+                            1);
+                    template.update(insertStatement2,
+                            totalVolume,
+                            3,
+                            totem.getIdTotem(),
+                            1);
+                }
+
+                exibirD3V1C6gui();
+
+            }
+        } catch (Exception erro) {
+            logger.severe(String.format("Erro ao buscar chave de acesso para cadastro do totem: %s", erro));
+        }
+
+    }
+
 
     private void txtChaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtChaveActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtChaveActionPerformed
 
     private void btnVincularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVincularActionPerformed
-
-        try {
-            Vinculo vinculo = new Vinculo();
-
-            if (vinculo.isCamposValidos(txtChave.getText(), txtId.getText(), txtLocal.getText())) {
-                String status = vinculo.Vincular(txtChave.getText(), txtId.getText(), txtLocal.getText());
-                if (status.equals("Succeeded")) {
-                    new FrameBemVindo().setVisible(true);
-                    this.setVisible(false);
-                } else {
-                    FramePopUp framePopUp = new FramePopUp();
-                    framePopUp.changeErrorDesc("Chave invalida");
-                    framePopUp.setVisible(true);
-                }
-            } else {
-                FramePopUp framePopUp = new FramePopUp();
-                framePopUp.changeErrorDesc("Preencha todos os campos para prosseguir!");
-                framePopUp.setVisible(true);
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Link failed");
-        } catch (IOException e) {
-            System.out.println("Link failed");
-        }
+        confimarLogin();
+//        try {
+//            Vinculo vinculo = new Vinculo();
+//
+//            if (vinculo.isCamposValidos(txtChave.getText(), txtId.getText(), txtLocal.getText())) {
+//                String status = vinculo.Vincular(txtChave.getText(), txtId.getText(), txtLocal.getText());
+//                if (status.equals("Succeeded")) {
+//                    new FrameBemVindo().setVisible(true);
+//                    this.setVisible(false);
+//                } else {
+//                    FramePopUp framePopUp = new FramePopUp();
+//                    framePopUp.changeErrorDesc("Chave invalida");
+//                    framePopUp.setVisible(true);
+//                }
+//            } else {
+//                FramePopUp framePopUp = new FramePopUp();
+//                framePopUp.changeErrorDesc("Preencha todos os campos para prosseguir!");
+//                framePopUp.setVisible(true);
+//            }
+//        } catch (FileNotFoundException e) {
+//            System.out.println("Link failed");
+//        } catch (IOException e) {
+//            System.out.println("Link failed");
+//        }
     }//GEN-LAST:event_btnVincularActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
