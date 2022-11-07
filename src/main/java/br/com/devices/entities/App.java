@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package br.com.devices.entities;
-
+import org.json.JSONObject;
 import java.io.IOException;
 
 /**
