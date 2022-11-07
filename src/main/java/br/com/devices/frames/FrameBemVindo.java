@@ -2,6 +2,7 @@ package br.com.devices.frames;
 
 import br.com.devices.methods.Coletor;
 import br.com.devices.methods.Insersor;
+import br.com.devices.methods.Slack;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.discos.DiscoGrupo;
 import com.github.britooo.looca.api.group.memoria.Memoria;
@@ -142,17 +143,17 @@ public class FrameBemVindo extends javax.swing.JFrame {
         if (contadorRAM == 36) {
             json.put("text", "Alerta no servidor: " + nomeServidor
                     + "\nAlerta de RAM :heavy_exclamation_mark: // Possível Atividade Suspeita :heavy_exclamation_mark:");
-//            Slack.enviarMensagem(json);
+            Slack.sendMessage(json);
         }
         if (contadorCPU == 36) {
             json.put("text", "Alerta no servidor: " + nomeServidor
                     + "\nAlerta de CPU :heavy_exclamation_mark: // Possível Atividade Suspeita :heavy_exclamation_mark:");
-//            Slack.enviarMensagem(json);
+            Slack.sendMessage(json);
         }
         if (contadorDisco == 36) {
             json.put("text", "Alerta no servidor: " + nomeServidor
                     + "\nAlerta de Disco :heavy_exclamation_mark: // Uso de volume acima de 90% da capacidade total :heavy_exclamation_mark:");
-//            Slack.enviarMensagem(json);
+            Slack.sendMessage(json);
         }
 
     }
