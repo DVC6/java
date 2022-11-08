@@ -4,19 +4,25 @@ public class TotemEntity {
 
     private Integer idTotem;
     private String nomeMaquina;
-    private String statusAtual;
     private Integer fkHospital;
     private String localizacao;
+    private String identificadorUnico;
 
     public TotemEntity() {
     }
 
-    public TotemEntity(Integer idTotem, String nomeMaquina, String statusAtual, Integer fkHospital, String localizacao) {
+    public TotemEntity(
+            Integer idTotem, 
+            String nomeMaquina, 
+            Integer fkHospital, 
+            String localizacao,
+            String identificadorUnico
+    ) {
         this.idTotem = idTotem;
         this.nomeMaquina = nomeMaquina;
-        this.statusAtual = statusAtual;
         this.fkHospital = fkHospital;
         this.localizacao = localizacao;
+        this.identificadorUnico = identificadorUnico;
     }
 
     public Integer getIdTotem() {
@@ -33,14 +39,6 @@ public class TotemEntity {
 
     public void setNomeMaquina(String nomeMaquina) {
         this.nomeMaquina = nomeMaquina;
-    }
-
-    public String getStatusAtual() {
-        return statusAtual;
-    }
-
-    public void setStatusAtual(String statusAtual) {
-        this.statusAtual = statusAtual;
     }
 
     public Integer getFkHospital() {
@@ -64,10 +62,9 @@ public class TotemEntity {
         return String.format("Dados do totem:"
                 + "\nidTotem: %s"
                 + "\nNome: %s"
-                + "\nStatus: %s"
                 + "\nfkHospital: %d"
                 + "\nLocalização: %s",
-                idTotem, nomeMaquina, statusAtual, fkHospital, localizacao);
+                idTotem, nomeMaquina, fkHospital, localizacao);
     }
 
 }
