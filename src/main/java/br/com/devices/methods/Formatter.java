@@ -8,6 +8,7 @@ import com.github.britooo.looca.api.group.processador.Processador;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Formatter {
     
@@ -31,6 +32,6 @@ public class Formatter {
         return discos.getDiscos().stream().map(d -> 
                 new BigDecimal(d.getTamanho().doubleValue() / 1e+9)
                 .setScale(2, RoundingMode.HALF_EVEN).doubleValue()
-        ).toList();
+        ).collect(Collectors.toList());
     }
 }
