@@ -66,7 +66,7 @@ public class Vinculo {
             //MySQL
             connectionMySql.execute(String.format("INSERT INTO totem " +
                     "(identificador_unico) VALUES" +
-                    "('$s);", getUniqueIdentifier()));
+                    "('$s');", getUniqueIdentifier()));
 
             List<TotemEntity> totemMySql
                     = connectionMySql.query("SELECT TOP 1 id_totem FROM totem ORDER BY id_totem DESC",
