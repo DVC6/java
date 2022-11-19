@@ -4,8 +4,6 @@ import br.com.devices.db.Conexao;
 import br.com.devices.entities.HospitalEntity;
 import br.com.devices.entities.TotemEntity;
 import com.github.britooo.looca.api.core.Looca;
-import com.github.britooo.looca.api.group.discos.DiscoGrupo;
-import com.github.britooo.looca.api.group.memoria.Memoria;
 import com.github.britooo.looca.api.group.processador.Processador;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -24,7 +22,6 @@ public class Vinculo {
 
         Looca looca = new Looca();
         Processador processador = looca.getProcessador();
-        DiscoGrupo discosGroup = looca.getGrupoDeDiscos();
 
         Conexao conexao = new Conexao();
         JdbcTemplate connectionAzure = conexao.getConnectionAzure();
@@ -49,9 +46,9 @@ public class Vinculo {
             List<TotemEntity> totemAzure
                     = connectionAzure.query("SELECT TOP 1 id_totem FROM totem ORDER BY id_totem DESC",
                     new BeanPropertyRowMapper<>(TotemEntity.class));
-            
+
             Integer idTotemAzure = totemAzure.get(0).getIdTotem();
-            
+
             String insertSQLComponentsAzure = String.format("INSERT INTO componente"
                     + "(total_componente, fktipocomponente, fktotem, modelo) VALUES"
                     + "(%.2f, %d, %d, '%s')"
@@ -60,16 +57,16 @@ public class Vinculo {
                     Formatter.getTotalCpu().doubleValue(), 1, idTotemAzure, processador.getNome(),
                     Formatter.getTotalMemoria(), 2, idTotemAzure, "RAM",
                     Formatter.getTotalDiscos(), 3, idTotemAzure, "Disco");
-            
+
             connectionAzure.execute(insertSQLComponentsAzure);
 
             //MySQL
             connectionMySql.execute(String.format("INSERT INTO totem " +
                     "(identificador_unico) VALUES" +
-                    "('$s');", getUniqueIdentifier()));
+                    "('%s');", getUniqueIdentifier()));
 
             List<TotemEntity> totemMySql
-                    = connectionMySql.query("SELECT TOP 1 id_totem FROM totem ORDER BY id_totem DESC",
+                    = connectionMySql.query("SELECT id_totem FROM totem ORDER BY id_totem DESC LIMIT 1;",
                     new BeanPropertyRowMapper<>(TotemEntity.class));
 
             Integer idTotemMySql = totemMySql.get(0).getIdTotem();
@@ -84,6 +81,8 @@ public class Vinculo {
                     Formatter.getTotalDiscos(), 3, idTotemMySql, "Disco");
 
             connectionMySql.execute(insertSQLComponentsMySql);
+
+            System.out.println(insertSQLComponentsMySql);
 
             System.out.println("Succeeded");
             
@@ -122,6 +121,6 @@ public class Vinculo {
             hexadecimal[i] = String.format("%02X", hardwareAddress[i]);
         }
 
-        return String.format(String.join("-", hexadecimal) + processador.getIdentificador());
+        return String.format(String.join("-", hexadecimal) + processador.getId());
     }
 }
