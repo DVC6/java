@@ -9,16 +9,16 @@ public class Connection {
     public Connection(String tipoBanco) {
         if (tipoBanco.equals("H2")) {
             dataSource = new BasicDataSource();
-            dataSource​.setDriverClassName("org.h2.Driver");
-            dataSource​.setUrl("jdbc:h2:file:./meu_banco");
-            dataSource​.setUsername("sa");
-            dataSource​.setPassword("");
+            dataSource.setDriverClassName("org.h2.Driver");
+            dataSource.setUrl("jdbc:h2:file:./meu_banco");
+            dataSource.setUsername("sa");
+            dataSource.setPassword("");
         } else if (tipoBanco.equals("MySQL")) {
             dataSource = new BasicDataSource();
-            dataSource​.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            dataSource​.setUrl("jdbc:mysql://0.0.0.0:3306/banco1?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
-            dataSource​.setUsername("root");
-            dataSource​.setPassword("urubu100");
+            dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+            dataSource.setUrl("jdbc:mysql://0.0.0.0:3306/banco1?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
+            dataSource.setUsername("root");
+            dataSource.setPassword("urubu100");
         } else if (tipoBanco.equals("Azure")) {
             dataSource = new BasicDataSource();
             dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

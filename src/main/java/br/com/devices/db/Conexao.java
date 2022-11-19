@@ -13,27 +13,39 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class Conexao {
 
-    private JdbcTemplate connection;
+    private JdbcTemplate connectionAzure;
+    private JdbcTemplate connectionMySQL;
 
     public Conexao() {
-        BasicDataSource datasource = new BasicDataSource();
 
-        datasource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        datasource.setUrl("jdbc:sqlserver://projeto-device.database.windows.net:1433;database=bd-device;user=device-admin@projeto-device;password=d3v1c6-password;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;");
-        datasource.setUsername("device-admin");
-        datasource.setPassword("d3v1c6-password");
+        // Conexão SQL Server Azure
 
-        connection = new JdbcTemplate(datasource);
+        BasicDataSource dataSourceAzure = new BasicDataSource();
 
-//  Preparado para MySQL no Docker        
-//        dataSource = new BasicDataSource();
-//        dataSource​.setDriverClassName("com.mysql.cj.jdbc.Driver");
-//        dataSource​.setUrl("jdbc:mysql://0.0.0.0:3306/banco1?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
-//        dataSource​.setUsername("root");
-//        dataSource​.setPassword("urubu100");
+        dataSourceAzure.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        dataSourceAzure.setUrl("jdbc:sqlserver://projeto-device.database.windows.net:1433;database=bd-device;user=device-admin@projeto-device;password=d3v1c6-password;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;");
+        dataSourceAzure.setUsername("device-admin");
+        dataSourceAzure.setPassword("d3v1c6-password");
+
+        connectionAzure = new JdbcTemplate(dataSourceAzure);
+
+        // Conexão MYSQÇ para Docker
+
+        BasicDataSource dataSourceMySQL = new BasicDataSource();
+
+        dataSourceMySQL = new BasicDataSource();
+        dataSourceMySQL.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSourceMySQL.setUrl("jdbc:mysql://0.0.0.0:3306/banco1?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
+        dataSourceMySQL.setUsername("root");
+        dataSourceMySQL.setPassword("urubu100");
+
+        connectionMySQL = new JdbcTemplate(dataSourceMySQL);
     }
 
-    public JdbcTemplate getConnection() {
-        return connection;
+    public JdbcTemplate getConnectionAzure() {
+        return connectionAzure;
+    }
+    public JdbcTemplate getConnectionMySQL() {
+        return connectionMySQL;
     }
 }

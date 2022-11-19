@@ -18,10 +18,6 @@ public class FrameLogin extends javax.swing.JFrame {
     Logger logger = Logger.getLogger("InicialLogger");
     Vinculo vinculo = new Vinculo();
 
-    Connection config = new Connection("Azure");
-    JdbcTemplate template = new JdbcTemplate(config.getDataSource());
-    Looca looca = new Looca();
-
     private Boolean ativarSQL = false;
 
     public Boolean getAtivarSQL() {
@@ -287,8 +283,6 @@ public class FrameLogin extends javax.swing.JFrame {
 
     // Tentar rodar APOS inicializacao
     public void autoLogin() {
-
-        String nomeMaquina;
         Vinculo vinculo = new Vinculo();
 
         try {
@@ -297,7 +291,6 @@ public class FrameLogin extends javax.swing.JFrame {
                 exibirD3V1C6gui();
             }
         } catch (UnknownHostException ex) {
-            // MENSAGEM PARA LOG
             logger.severe(String.format("Inicial - Erro ao buscar hostname: %s", ex.toString()));
         } catch (Exception ex) {
             logger.severe("Inicial - Erro ao conectar com banco de dados");

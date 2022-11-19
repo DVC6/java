@@ -19,48 +19,85 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class Vinculo {
 
     public Boolean Vincular(String cnpj, String nomeMaquina, String local) throws UnknownHostException, SocketException{
+
         Locale.setDefault(Locale.US);
+
         Looca looca = new Looca();
-        Memoria memoria = looca.getMemoria();
         Processador processador = looca.getProcessador();
         DiscoGrupo discosGroup = looca.getGrupoDeDiscos();
+
         Conexao conexao = new Conexao();
-        JdbcTemplate connection = conexao.getConnection();
+        JdbcTemplate connectionAzure = conexao.getConnectionAzure();
+        JdbcTemplate connectionMySql = conexao.getConnectionMySQL();
+
         
         List<HospitalEntity> hospital
-                = connection.query("SELECT * FROM [dbo].[hospital] WHERE cnpj = ?",
+                = connectionAzure.query("SELECT * FROM [dbo].[hospital] WHERE cnpj = ?",
                         new BeanPropertyRowMapper<>(HospitalEntity.class), cnpj);
         
         try {
             String fkHospital = hospital.get(0).getIdHospital().toString();
-            connection.execute(String.format("INSERT INTO [dbo].[totem] "
+
+            //Azure
+            String insertSQLTotem = String.format("INSERT INTO totem "
                     + "(nome_maquina, localizacao, fkhospital, identificador_unico)"
                     + " VALUES('%s', '%s', '%s', '%s')",
-                    nomeMaquina, local, fkHospital, getUniqueIdentifier()));
+                    nomeMaquina, local, fkHospital, getUniqueIdentifier());
 
-            List<TotemEntity> totem
-                    = connection.query("SELECT TOP 1 id_totem FROM [dbo].[totem] ORDER BY id_totem DESC",
+            connectionAzure.execute(insertSQLTotem);
+
+            List<TotemEntity> totemAzure
+                    = connectionAzure.query("SELECT TOP 1 id_totem FROM totem ORDER BY id_totem DESC",
                     new BeanPropertyRowMapper<>(TotemEntity.class));
             
-            Integer idTotem = totem.get(0).getIdTotem();
+            Integer idTotemAzure = totemAzure.get(0).getIdTotem();
             
-            String insertSQL = String.format("INSERT INTO [dbo].[componente]"
+            String insertSQLComponentsAzure = String.format("INSERT INTO componente"
                     + "(total_componente, fktipocomponente, fktotem, modelo) VALUES"
                     + "(%.2f, %d, %d, '%s')"
                     + ",(%.2f, %d, %d, '%s')",
-                    Formatter.getTotalCpu().doubleValue(), 1, idTotem, processador.getNome(),
-                    Formatter.getTotalMemoria(), 2, idTotem, "RAM");
+                    Formatter.getTotalCpu().doubleValue(), 1, idTotemAzure, processador.getNome(),
+                    Formatter.getTotalMemoria(), 2, idTotemAzure, "RAM");
             
             for (int i = 0; i < discosGroup.getDiscos().size(); i++) {
-                insertSQL += String.format(",(%.2f, %d, %d, '%s')",
+                insertSQLComponentsAzure += String.format(",(%.2f, %d, %d, '%s')",
                     Formatter.getTotalDiscos().get(i),
                     3,
-                    idTotem,
+                    idTotemAzure,
                     discosGroup.getDiscos().get(i).getModelo()
                 );
             }
             
-            connection.execute(insertSQL);
+            connectionAzure.execute(insertSQLComponentsAzure);
+
+            //MySQL
+            connectionMySql.execute(String.format("INSERT INTO totem " +
+                    "(identificador_unico) VALUES" +
+                    "('$s);", getUniqueIdentifier()));
+
+            List<TotemEntity> totemMySql
+                    = connectionMySql.query("SELECT TOP 1 id_totem FROM totem ORDER BY id_totem DESC",
+                    new BeanPropertyRowMapper<>(TotemEntity.class));
+
+            Integer idTotemMySql = totemMySql.get(0).getIdTotem();
+
+            String insertSQLComponentsMySql = String.format("INSERT INTO componente"
+                            + "(total_componente, fktipocomponente, fktotem, modelo) VALUES"
+                            + "(%.2f, %d, %d, '%s')"
+                            + ",(%.2f, %d, %d, '%s')",
+                    Formatter.getTotalCpu().doubleValue(), 1, idTotemMySql, processador.getNome(),
+                    Formatter.getTotalMemoria(), 2, idTotemMySql, "RAM");
+
+            for (int i = 0; i < discosGroup.getDiscos().size(); i++) {
+                insertSQLComponentsMySql += String.format(",(%.2f, %d, %d, '%s')",
+                        Formatter.getTotalDiscos().get(i),
+                        3,
+                        idTotemMySql,
+                        discosGroup.getDiscos().get(i).getModelo()
+                );
+            }
+
+            connectionMySql.execute(insertSQLComponentsMySql + ";");
 
             System.out.println("Succeeded");
             
@@ -77,7 +114,7 @@ public class Vinculo {
 
     public Boolean isAlreadyVinculado() throws UnknownHostException, SocketException {
         Conexao conexao = new Conexao();
-        JdbcTemplate connection = conexao.getConnection();
+        JdbcTemplate connection = conexao.getConnectionAzure();
         
         List<TotemEntity> totem
                 = connection.query("SELECT * FROM [dbo].[totem] WHERE identificador_unico = ?",
