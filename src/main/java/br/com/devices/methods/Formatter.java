@@ -26,12 +26,12 @@ public class Formatter {
         ).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
     
-    public static List<Double> getTotalDiscos() {
+    public static Double getTotalDiscos() {
         Looca looca = new Looca();
         DiscoGrupo discos = looca.getGrupoDeDiscos();
-        return discos.getDiscos().stream().map(d -> 
+        return discos.getDiscos().stream().mapToDouble(d ->
                 new BigDecimal(d.getTamanho().doubleValue() / 1e+9)
                 .setScale(2, RoundingMode.HALF_EVEN).doubleValue()
-        ).collect(Collectors.toList());
+        ).sum();
     }
 }

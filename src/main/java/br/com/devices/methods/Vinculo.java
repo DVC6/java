@@ -55,18 +55,11 @@ public class Vinculo {
             String insertSQLComponentsAzure = String.format("INSERT INTO componente"
                     + "(total_componente, fktipocomponente, fktotem, modelo) VALUES"
                     + "(%.2f, %d, %d, '%s')"
+                    + ",(%.2f, %d, %d, '%s')"
                     + ",(%.2f, %d, %d, '%s')",
                     Formatter.getTotalCpu().doubleValue(), 1, idTotemAzure, processador.getNome(),
-                    Formatter.getTotalMemoria(), 2, idTotemAzure, "RAM");
-            
-            for (int i = 0; i < discosGroup.getDiscos().size(); i++) {
-                insertSQLComponentsAzure += String.format(",(%.2f, %d, %d, '%s')",
-                    Formatter.getTotalDiscos().get(i),
-                    3,
-                    idTotemAzure,
-                    discosGroup.getDiscos().get(i).getModelo()
-                );
-            }
+                    Formatter.getTotalMemoria(), 2, idTotemAzure, "RAM",
+                    Formatter.getTotalDiscos(), 3, idTotemAzure, "Disco");
             
             connectionAzure.execute(insertSQLComponentsAzure);
 
@@ -84,20 +77,13 @@ public class Vinculo {
             String insertSQLComponentsMySql = String.format("INSERT INTO componente"
                             + "(total_componente, fktipocomponente, fktotem, modelo) VALUES"
                             + "(%.2f, %d, %d, '%s')"
-                            + ",(%.2f, %d, %d, '%s')",
+                            + ",(%.2f, %d, %d, '%s')"
+                            + ",(%.2f, %d, %d, '%s');",
                     Formatter.getTotalCpu().doubleValue(), 1, idTotemMySql, processador.getNome(),
-                    Formatter.getTotalMemoria(), 2, idTotemMySql, "RAM");
+                    Formatter.getTotalMemoria(), 2, idTotemMySql, "RAM",
+                    Formatter.getTotalDiscos(), 3, idTotemMySql, "Disco");
 
-            for (int i = 0; i < discosGroup.getDiscos().size(); i++) {
-                insertSQLComponentsMySql += String.format(",(%.2f, %d, %d, '%s')",
-                        Formatter.getTotalDiscos().get(i),
-                        3,
-                        idTotemMySql,
-                        discosGroup.getDiscos().get(i).getModelo()
-                );
-            }
-
-            connectionMySql.execute(insertSQLComponentsMySql + ";");
+            connectionMySql.execute(insertSQLComponentsMySql);
 
             System.out.println("Succeeded");
             

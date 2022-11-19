@@ -36,7 +36,7 @@ public class Conexao {
         dataSourceMySQL = new BasicDataSource();
         dataSourceMySQL.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSourceMySQL.setUrl("jdbc:mysql://0.0.0.0:3306/banco1?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
-        dataSourceMySQL.setUsername("root");
+        dataSourceMySQL.setUsername("device");
         dataSourceMySQL.setPassword("urubu100");
 
         connectionMySQL = new JdbcTemplate(dataSourceMySQL);
