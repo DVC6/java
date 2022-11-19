@@ -1,32 +1,22 @@
 package br.com.devices.frames;
 
 import br.com.devices.db.Connection;
-import br.com.devices.entities.HospitalEntity;
-import br.com.devices.entities.TotemEntity;
 import br.com.devices.methods.Vinculo;
 import com.github.britooo.looca.api.core.Looca;
-import com.github.britooo.looca.api.group.discos.DiscoGrupo;
-import com.github.britooo.looca.api.group.discos.Volume;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class FrameLogin extends javax.swing.JFrame {
 
     FileHandler fh;
     Logger logger = Logger.getLogger("InicialLogger");
+    Vinculo vinculo = new Vinculo();
 
     Connection config = new Connection("Azure");
     JdbcTemplate template = new JdbcTemplate(config.getDataSource());
@@ -299,14 +289,10 @@ public class FrameLogin extends javax.swing.JFrame {
     public void autoLogin() {
 
         String nomeMaquina;
+        Vinculo vinculo = new Vinculo();
 
         try {
-            nomeMaquina = InetAddress.getLocalHost().getHostName();
-            logger.info("Inicial - Buscando nome da máquina atual no banco de dados");
-
-            List buscarNomeTotem = template.queryForList("SELECT * FROM totem "
-                    + "WHERE nome_maquina = '" + nomeMaquina + "'");
-            if (!buscarNomeTotem.isEmpty()) {
+            if (vinculo.isAlreadyVinculado()) {
                 logger.info("Inicial - Totem encontrado no banco de dados. Habilitando tela de login.");
                 exibirD3V1C6gui();
             }
@@ -329,100 +315,26 @@ public class FrameLogin extends javax.swing.JFrame {
         telaD3V1C6gui.setVisible(true);
     }
 
-    public void confimarLogin() {
-        String chaveDigitada = txtChave.getText();
-        String id = txtId.getText();
-        String local = txtLocal.getText();
-
-        String idHospital = null;
-        String nomeMaquina;
-
-        try {
-            nomeMaquina = InetAddress.getLocalHost().getHostName();
-            BigDecimal totalCPU = new BigDecimal(looca.getProcessador().getFrequencia() / 1e+9).setScale(2, RoundingMode.HALF_EVEN);
-            BigDecimal totalRAM = new BigDecimal(looca.getMemoria().getTotal().doubleValue() / 1073741824).setScale(2, RoundingMode.HALF_EVEN);
-
-            DiscoGrupo grupoDeDiscos = looca.getGrupoDeDiscos();
-            List<Volume> volumes = grupoDeDiscos.getVolumes();
-            Double discoTotal = 0.0;
-            for (Volume volume : volumes) {
-                discoTotal += volume.getTotal().doubleValue();
-            }
-            BigDecimal totalVolume = new BigDecimal(discoTotal.doubleValue() / 1e+9).setScale(0, RoundingMode.HALF_EVEN);
-
-            HospitalEntity hospitalTeste = new HospitalEntity();
-            List<HospitalEntity> buscaHospital = template.query("SELECT * FROM hospital WHERE chave_acesso = ?",
-                    new BeanPropertyRowMapper<>(HospitalEntity.class), chaveDigitada);
-            for (HospitalEntity hospital : buscaHospital) {
-                idHospital = hospital.getIdHospital().toString();
-            }
-            if (buscaHospital.isEmpty()) {
-                logger.severe("Erro - CNPJ não encontrado");
-            } else {
-                String insertStatement = "INSERT INTO totem VALUES (?, ?, ?, ?)";
-                template.update(insertStatement, nomeMaquina, "OK", idHospital, local);
-                TotemEntity totemTeste = new TotemEntity();
-                List<TotemEntity> buscaTotem = template.query("SELECT * FROM totem WHERE nome_maquina = ?",
-                        new BeanPropertyRowMapper<>(TotemEntity.class), nomeMaquina);
-                for (TotemEntity totem : buscaTotem) {
-                    // Total / fkTipoComponente / fkTotem / fkMetricas
-                    String insertStatement2 = "INSERT INTO componente VALUES (?, ?, ?, ?)";
-                    template.update(insertStatement2,
-                            totalCPU,
-                            1,
-                            totem.getIdTotem(),
-                            1);
-                    template.update(insertStatement2,
-                            totalRAM,
-                            2,
-                            totem.getIdTotem(),
-                            1);
-                    template.update(insertStatement2,
-                            totalVolume,
-                            3,
-                            totem.getIdTotem(),
-                            1);
-                }
-
-                exibirD3V1C6gui();
-
-            }
-        } catch (Exception erro) {
-            logger.severe(String.format("Erro ao buscar chave de acesso para cadastro do totem: %s", erro));
-        }
-
-    }
-
 
     private void txtChaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtChaveActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtChaveActionPerformed
 
     private void btnVincularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVincularActionPerformed
-        confimarLogin();
-//        try {
-//            Vinculo vinculo = new Vinculo();
-//
-//            if (vinculo.isCamposValidos(txtChave.getText(), txtId.getText(), txtLocal.getText())) {
-//                String status = vinculo.Vincular(txtChave.getText(), txtId.getText(), txtLocal.getText());
-//                if (status.equals("Succeeded")) {
-//                    new FrameBemVindo().setVisible(true);
-//                    this.setVisible(false);
-//                } else {
-//                    FramePopUp framePopUp = new FramePopUp();
-//                    framePopUp.changeErrorDesc("Chave invalida");
-//                    framePopUp.setVisible(true);
-//                }
-//            } else {
-//                FramePopUp framePopUp = new FramePopUp();
-//                framePopUp.changeErrorDesc("Preencha todos os campos para prosseguir!");
-//                framePopUp.setVisible(true);
-//            }
-//        } catch (FileNotFoundException e) {
-//            System.out.println("Link failed");
-//        } catch (IOException e) {
-//            System.out.println("Link failed");
-//        }
+        String cnpj = txtChave.getText();
+        String id = txtId.getText();
+        String local = txtLocal.getText();
+        
+        try {
+            if (vinculo.isCamposValidos(cnpj, id, local)) {
+                vinculo.Vincular(cnpj, id, local);
+            }
+        } catch (UnknownHostException e) {
+            
+        } catch (SocketException e) {
+            
+        }
+
     }//GEN-LAST:event_btnVincularActionPerformed
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed

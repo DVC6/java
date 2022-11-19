@@ -24,7 +24,7 @@ public class D3V1C6cli {
     Logger logger = Logger.getLogger("D3V1C6cli");
     FileHandler fh;
 
-    public void rodarCodeSafe(Insersor insersor) {
+    public void rodarDevice(Insersor insersor) {
 
         try {
             fh = new FileHandler("../D3V1C6cliLog.log");

@@ -1,4 +1,0 @@
-out 29, 2022 5:55:38 AM br.com.devices.frames.FrameLogin autoLogin
-INFO: Inicial - Buscando nome da máquina atual no banco de dados
-out 29, 2022 5:55:41 AM br.com.devices.frames.FrameLogin autoLogin
-INFO: Inicial - Totem encontrado no banco de dados. Habilitando tela de login.

@@ -5,6 +5,7 @@ import br.com.devices.entities.HospitalEntity;
 import br.com.devices.entities.TotemEntity;
 import br.com.devices.frames.FrameLogin;
 import br.com.devices.methods.Insersor;
+import br.com.devices.methods.Vinculo;
 import com.github.britooo.looca.api.core.Looca;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -26,8 +27,9 @@ public class App {
         Scanner leitorNumerico = new Scanner(System.in);
         Scanner leitorTexto = new Scanner(System.in);
         Connection config = new Connection("Azure");
-        JdbcTemplate template = new JdbcTemplate(config.getDataSource());
+        JdbcTemplate connection = new JdbcTemplate(config.getDataSource());
         Looca looca = new Looca();
+        Vinculo vinculo = new Vinculo();
 
         Logger logger = Logger.getLogger("Main");
         try {
@@ -54,8 +56,7 @@ public class App {
             System.out.println("\nEscolha o modo de execução:"
                     + "\n   1 - Padrão (Com GUI)"
                     + "\n   2 - Servidor (Sem GUI)"
-                    + "\n   3 - Completo (Com GUI + MySQL)"
-                    + "\n   4 - Sair");
+                    + "\n   3 - Sair");
 
             Integer modoSelecionado = leitorNumerico.nextInt();
             Insersor insersor = new Insersor();
@@ -71,15 +72,15 @@ public class App {
 
                     System.out.println("Validando Servidor...");
                     String nomeMaquina = null;
+                    String localizacao = null;
                     String nomeHospital = null;
-                    String idHospital = null;
+                    Integer idHospital = null;
+                    String cnpj = null;
+                    String idUnico = vinculo.getUniqueIdentifier();
 
                     try {
-                        nomeMaquina = InetAddress.getLocalHost().getHostName();
-                        System.out.println("Totem: " + nomeMaquina);
-                        List buscarNomeTotem = template.queryForList("SELECT * FROM totem "
-                                + "WHERE nome_maquina = '" + nomeMaquina + "'");
-                        if (!buscarNomeTotem.isEmpty()) {
+                        System.out.println("Totem: " + idUnico);
+                        if (vinculo.isAlreadyVinculado()) {
                             System.out.println("Totem já cadastrado..."
                                     + "\nRedirecionando...");
 
@@ -92,16 +93,17 @@ public class App {
 
                                     System.out.println("\nTotem ainda não cadastrado!!!"
                                             + "\nDigite o CNPJ do seu Hospital:");
-                                    String chaveDigitada = leitorTexto.nextLine();
+                                    cnpj = leitorTexto.nextLine();
 
                                     try {
-                                        HospitalEntity hospitalTeste = new HospitalEntity();
-                                        List<HospitalEntity> buscaHospital = template.query("SELECT * FROM empresa WHERE chave_acesso = ?",
-                                                new BeanPropertyRowMapper<>(HospitalEntity.class), chaveDigitada);
+                                        List<HospitalEntity> buscaHospital = connection.query("SELECT * FROM hospital WHERE cnpj = ?",
+                                                new BeanPropertyRowMapper<>(HospitalEntity.class), cnpj);
+                                        
                                         for (HospitalEntity hospital : buscaHospital) {
                                             nomeHospital = hospital.getNomeFantasia();
-                                            idHospital = hospital.getIdHospital().toString();
+                                            idHospital = hospital.getIdHospital();
                                         }
+                                        
                                         if (buscaHospital.isEmpty()) {
                                             System.out.println("CNPJ não encontrado!!!");
                                         }
@@ -113,34 +115,24 @@ public class App {
                                 String confirmacaoEmpresa = leitorTexto.nextLine();
                                 if (confirmacaoEmpresa.equalsIgnoreCase("y")) {
 
-                                    String insertStatement = "INSERT INTO totem VALUES (?, ?, ?, ?)";
-                                    template.update(insertStatement,
-                                            nomeMaquina,
-                                            "OK",
-                                            idHospital,
-                                            "Ala-A");
-                                    TotemEntity servidorTeste = new TotemEntity();
-                                    List<TotemEntity> buscaTotem = template.query("SELECT * FROM totem WHERE nome_maquina = ?",
-                                            new BeanPropertyRowMapper<>(TotemEntity.class), nomeMaquina);
-                                    for (TotemEntity totem : buscaTotem) {
-                                        String insertStatement2 = "INSERT INTO componente VALUES (?, ?, ?, ?)";
-                                        template.update(insertStatement2,
-                                                "total?",
-                                                1,
-                                                totem.getIdTotem(),
-                                                1);
-                                        template.update(insertStatement2,
-                                                "total?",
-                                                2,
-                                                totem.getIdTotem(),
-                                                1);
-                                        template.update(insertStatement2,
-                                                "total?",
-                                                3,
-                                                totem.getIdTotem(),
-                                                1);
+                                    while (nomeMaquina == null || nomeMaquina.isBlank()) {   
+                                        System.out.println("Insira um nome/identificador para este totem:");
+                                        nomeMaquina = leitorTexto.nextLine();
                                     }
-                                    empresaConfirmada = true;
+                                    
+                                    while (localizacao == null || localizacao.isBlank()) { 
+                                        System.out.println("Insira a localizacao do seu totem:");
+                                        localizacao = leitorTexto.nextLine();
+                                    }
+                                    
+                                    Boolean vinculadoComSucesso = vinculo.Vincular(cnpj, nomeMaquina, localizacao);
+                                    
+                                    if (vinculadoComSucesso){
+                                        empresaConfirmada = true;
+                                        System.out.println("Totem vinculado com sucesso!");
+                                    } else {
+                                        System.out.println("Houve um problema ao vincular este totem.");
+                                    }
                                 } else {
                                     System.out.println("Chave digitada não corresponde ao seu Hospital...");
                                 }
@@ -151,52 +143,14 @@ public class App {
                         logger.severe(String.format("Erro ao buscar dados do totem: %s", ex));
                     }
 
-                    Boolean usuarioLogado = false;
-                    while (!usuarioLogado) {
-                        System.out.println("Email:");
-                        String usuarioDigitado = leitorTexto.nextLine();
-                        System.out.println("Senha:");
-                        String senhaDigitada = leitorTexto.nextLine();
-
-                        System.out.println("Verificando Dados...");
-
-                        try {
-                            List buscarUsuario = template.queryForList(
-                                    "SELECT * FROM funcionario "
-                                    + "WHERE email = '" + usuarioDigitado
-                                    + "' AND senha = '" + senhaDigitada + "'");
-                            if (buscarUsuario.isEmpty()) {
-                                System.out.println("Credenciais Incorretas");
-
-                            } else {
-                                System.out.println("Usuário Logado com sucesso!"
-                                        + "\nBem-vindo!!!");
-                                usuarioLogado = true;
-                            }
-
-                        } catch (Exception erro) {
-                            logger.severe(String.format("Erro ao tentar logar o usuário: %s Erro: %s", usuarioDigitado, erro));
-                        }
-                    }
-
-                    //////////Rodar CodeSafe
+                    //////////Rodar D3V1C6cli
                     D3V1C6cli d3v1c6cli = new D3V1C6cli();
-                    d3v1c6cli.rodarCodeSafe(insersor);
+                    d3v1c6cli.rodarDevice(insersor);
 
-                    menuLoop = false;
-                    break;
-////////////////////////////////////////////////////////////////////////////////
-
-                case 3:
-                    insersor.setAtivarSQL(true);
-                    FrameLogin telaInicial = new FrameLogin();
-                    telaInicial.setAtivarSQL(true);
-                    telaInicial.setVisible(true);
-//                    new TelaInicial().setVisible(true);
                     menuLoop = false;
                     break;
 ////////////////////////////////////////////////////////////////////////////////                    
-                case 4:
+                case 3:
                     System.out.println("Obrigado por utilizar nosso produto");
                     System.exit(0);
                     break;

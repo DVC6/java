@@ -14,7 +14,6 @@ public class HospitalEntity {
     private String estado;
     private String bairro;
     private String telefone;
-    private String chave_acesso;
     private String cep;
 
     public HospitalEntity() {
@@ -23,7 +22,7 @@ public class HospitalEntity {
     public HospitalEntity(Integer idHospital, String nomeFantasia, String cnpj,
             String email, String senha, String site, String logradouro,
             Integer numero, String cidade, String estado, String bairro,
-            String telefone, String chave_acesso, String cep) {
+            String telefone, String cep) {
         this.idHospital = idHospital;
         this.nomeFantasia = nomeFantasia;
         this.cnpj = cnpj;
@@ -36,7 +35,6 @@ public class HospitalEntity {
         this.estado = estado;
         this.bairro = bairro;
         this.telefone = telefone;
-        this.chave_acesso = chave_acesso;
         this.cep = cep;
     }
 
@@ -136,14 +134,6 @@ public class HospitalEntity {
         this.telefone = telefone;
     }
 
-    public String getChave_acesso() {
-        return chave_acesso;
-    }
-
-    public void setChave_acesso(String chave_acesso) {
-        this.chave_acesso = chave_acesso;
-    }
-
     public String getCep() {
         return cep;
     }
@@ -156,7 +146,7 @@ public class HospitalEntity {
     public String toString() {
         return String.format("Dados do Hospital:"
                 + "\nidHospital: %s"
-                + "\nNpme: %s"
+                + "\nNome: %s"
                 + "\nCNPJ: %s"
                 + "\nEmail: %s"
                 + "\nSenha: %s"
@@ -167,10 +157,9 @@ public class HospitalEntity {
                 + "\nEstado: %s"
                 + "\nBairro: %s"
                 + "\nTelefone: %s"
-                + "\nChave de Acesso: %s"
                 + "\nCEP: %s",
                 idHospital, nomeFantasia, cnpj, email, senha, site, logradouro,
-                numero, cidade, estado, bairro, telefone, chave_acesso, cep);
+                numero, cidade, estado, bairro, telefone, cep);
     }
 
 }
