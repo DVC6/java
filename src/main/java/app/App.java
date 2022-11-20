@@ -48,13 +48,14 @@ public class App {
                 + "| |   \\ \\    |___ \\    \\ \\    / /      | | | |        /  __ \\\n"
                 + "| |   / /  __    \\ \\    \\ \\__/ /       | | | |       / /   \\ \\\n"
                 + "| |__/ /   \\ \\___/ /     \\    /        | |  \\ \\____  \\ \\___/ /\n"
-                + "|_____/     \\_____/       \\__/         |_|   \\____/   \\_____/");
+                + "|_____/     \\_____/       \\__/         |_|   \\____/   \\_____/ \n\n"
+                + "Version: 1.1.5");
 
         Boolean menuLoop = true;
         while (menuLoop) {
 
-            System.out.println("\nEscolha o modo de execução:"
-                    + "\n   1 - Padrão (Com GUI)"
+            System.out.println("\nEscolha o modo de execucao:"
+                    + "\n   1 - Padrao (Com GUI)"
                     + "\n   2 - Servidor (Sem GUI)"
                     + "\n   3 - Sair");
 
@@ -81,7 +82,7 @@ public class App {
                     try {
                         System.out.println("Totem: " + idUnico);
                         if (vinculo.isAlreadyVinculado()) {
-                            System.out.println("Totem já cadastrado..."
+                            System.out.println("\nTotem já cadastrado..."
                                     + "\nRedirecionando...");
 
                         } else {
@@ -105,10 +106,10 @@ public class App {
                                         }
                                         
                                         if (buscaHospital.isEmpty()) {
-                                            System.out.println("CNPJ não encontrado!!!");
+                                            System.out.println("\nCNPJ não encontrado!!!");
                                         }
                                     } catch (Exception erro) {
-                                        logger.severe(String.format("Erro ao buscar chave de acesso para cadastro do totem: %s", erro));
+                                        logger.severe(String.format("\nErro ao buscar chave de acesso para cadastro do totem: %s", erro));
                                     }
                                 }
                                 System.out.println("\nSeu hospital é: " + nomeHospital + "? [Y/N]");
@@ -116,12 +117,12 @@ public class App {
                                 if (confirmacaoEmpresa.equalsIgnoreCase("y")) {
 
                                     while (nomeMaquina == null || nomeMaquina.isBlank()) {   
-                                        System.out.println("Insira um nome/identificador para este totem:");
+                                        System.out.println("\nInsira um nome/identificador para este totem:");
                                         nomeMaquina = leitorTexto.nextLine();
                                     }
                                     
                                     while (localizacao == null || localizacao.isBlank()) { 
-                                        System.out.println("Insira a localizacao do seu totem:");
+                                        System.out.println("\nInsira a localizacao do seu totem:");
                                         localizacao = leitorTexto.nextLine();
                                     }
                                     
@@ -129,18 +130,18 @@ public class App {
                                     
                                     if (vinculadoComSucesso){
                                         empresaConfirmada = true;
-                                        System.out.println("Totem vinculado com sucesso!");
+                                        System.out.println("\nTotem vinculado com sucesso!");
                                     } else {
-                                        System.out.println("Houve um problema ao vincular este totem.");
+                                        System.out.println("\nHouve um problema ao vincular este totem.");
                                     }
                                 } else {
-                                    System.out.println("Chave digitada não corresponde ao seu Hospital...");
+                                    System.out.println("\nChave digitada não corresponde ao seu Hospital...");
                                 }
                             }
                         }
 
                     } catch (UnknownHostException ex) {
-                        logger.severe(String.format("Erro ao buscar dados do totem: %s", ex));
+                        logger.severe(String.format("\nErro ao buscar dados do totem: %s", ex));
                     }
 
                     //////////Rodar D3V1C6cli
@@ -151,12 +152,12 @@ public class App {
                     break;
 ////////////////////////////////////////////////////////////////////////////////                    
                 case 3:
-                    System.out.println("Obrigado por utilizar nosso produto");
+                    System.out.println("\nObrigado por utilizar nosso produto");
                     System.exit(0);
                     break;
 ////////////////////////////////////////////////////////////////////////////////                    
                 default:
-                    System.out.println("Opção inválida! Digite o número da opção deseja, de acordo com o menu:");
+                    System.out.println("\nOpção inválida! Digite o número da opção deseja, de acordo com o menu:");
                     break;
             }
         }
