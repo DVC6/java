@@ -7,6 +7,11 @@ package br.com.devices.db;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /**
  *
  * @author gabri
@@ -14,7 +19,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class Conexao {
 
     private JdbcTemplate connectionAzure;
-    private JdbcTemplate connectionMySQL;
+    private Statement connectionMySQL;
+//    private JdbcTemplate connectionMySQL;
 
     public Conexao() {
 
@@ -29,23 +35,46 @@ public class Conexao {
 
         connectionAzure = new JdbcTemplate(dataSourceAzure);
 
-        // Conexão MYSQÇ para Docker
+        // Conexão MYSQL para Docker
 
-        BasicDataSource dataSourceMySQL = new BasicDataSource();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-        dataSourceMySQL = new BasicDataSource();
-        dataSourceMySQL.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSourceMySQL.setUrl("jdbc:mysql://0.0.0.0:3306/device?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
-        dataSourceMySQL.setUsername("device");
-        dataSourceMySQL.setPassword("urubu100");
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/device?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC",
+                    "root",
+                    "urubu100");
 
-        connectionMySQL = new JdbcTemplate(dataSourceMySQL);
+            connectionMySQL = con.createStatement();
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
+
+
+
+//        BasicDataSource dataSourceMySQL = new BasicDataSource();
+//
+//        dataSourceMySQL.setDriverClassName("com.mysql.cj.jdbc.Driver");
+//        dataSourceMySQL.setUrl("jdbc:mysql://localhost:3306/device?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
+//        dataSourceMySQL.setUsername("root");
+//        dataSourceMySQL.setPassword("urubu100");
+//
+//        connectionMySQL = new JdbcTemplate(dataSourceMySQL);
+
+
     }
 
     public JdbcTemplate getConnectionAzure() {
         return connectionAzure;
     }
-    public JdbcTemplate getConnectionMySQL() {
+    public Statement getConnectionMySQL() {
         return connectionMySQL;
     }
 }

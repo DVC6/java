@@ -38,6 +38,9 @@ public class Coletor {
     private String atualRAM;
     private String atualCPU;
     private String atualDisco;
+    private String atualRAMQtd;
+    private String atualCPUQtd;
+    private String atualDiscoQtd;
     private String serverRAM;
     private String serverCPU;
     private String serverDisco;
@@ -60,7 +63,9 @@ public class Coletor {
         BigDecimal totalRAM = new BigDecimal(looca.getMemoria().getTotal().doubleValue() / 1073741824).setScale(2, RoundingMode.HALF_EVEN);
         BigDecimal percentualConsumoRAM = new BigDecimal((consumoRAM.doubleValue() * 100) / totalRAM.doubleValue()).setScale(2, RoundingMode.HALF_EVEN);
         registroRAM.setConsumo(percentualConsumoRAM.doubleValue());
+        registroRAM.setConsumoQtd(Formatter.getConsumoMemoria());
         this.atualRAM = (percentualConsumoRAM).toString();
+        this.atualRAMQtd = Formatter.getConsumoMemoria().toString();
         this.serverRAM = (totalRAM).toString();
         return registroRAM;
     }
@@ -73,6 +78,7 @@ public class Coletor {
         BigDecimal totalCPU = new BigDecimal(looca.getProcessador().getFrequencia() / 1e+9).setScale(2, RoundingMode.HALF_EVEN);
         BigDecimal percentualCPU = new BigDecimal(looca.getProcessador().getUso()).setScale(2, RoundingMode.HALF_EVEN);
         registroCPU.setConsumo(percentualCPU.doubleValue());
+        registroCPU.setConsumoQtd(null);
         this.atualCPU = (percentualCPU).toString();
         this.serverCPU = (totalCPU).toString();
         return registroCPU;
@@ -100,7 +106,9 @@ public class Coletor {
         BigDecimal consumoDisco = new BigDecimal(discoConsumido / 1e+9).setScale(2, RoundingMode.HALF_EVEN);
         BigDecimal percentualDisco = new BigDecimal((consumoDisco.doubleValue() * 100) / totalVolume.doubleValue()).setScale(0, RoundingMode.HALF_EVEN);
         registroDISCO.setConsumo(percentualDisco.doubleValue());
+        registroDISCO.setConsumoQtd(Formatter.getConsumoDiscos());
         this.atualDisco = (percentualDisco).toString();
+        this.atualDiscoQtd = Formatter.getConsumoDiscos().toString();
         this.serverDisco = (totalVolume).toString();
         return registroDISCO;
 //        BigDecimal totalDisco = new BigDecimal(looca.getGrupoDeDiscos().getTamanhoTotal().doubleValue() / 1e+9).setScale(0, RoundingMode.HALF_EVEN);

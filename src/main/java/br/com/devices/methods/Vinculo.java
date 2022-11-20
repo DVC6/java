@@ -9,6 +9,8 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Locale;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -25,7 +27,7 @@ public class Vinculo {
 
         Conexao conexao = new Conexao();
         JdbcTemplate connectionAzure = conexao.getConnectionAzure();
-        JdbcTemplate connectionMySql = conexao.getConnectionMySQL();
+        Statement connectionMySql = conexao.getConnectionMySQL();
 
         
         List<HospitalEntity> hospital
@@ -65,11 +67,11 @@ public class Vinculo {
                     "(identificador_unico) VALUES" +
                     "('%s');", getUniqueIdentifier()));
 
-            List<TotemEntity> totemMySql
-                    = connectionMySql.query("SELECT id_totem FROM totem ORDER BY id_totem DESC LIMIT 1;",
-                    new BeanPropertyRowMapper<>(TotemEntity.class));
+            Integer idTotemMySql = connectionMySql.executeQuery(
+                    "SELECT id_totem FROM totem ORDER BY id_totem DESC LIMIT 1;"
+            ).getInt(0);
 
-            Integer idTotemMySql = totemMySql.get(0).getIdTotem();
+//            Integer idTotemMySql = totemMySql.get(0).getIdTotem();
 
             String insertSQLComponentsMySql = String.format("INSERT INTO componente"
                             + "(total_componente, fktipocomponente, fktotem, modelo) VALUES"
@@ -87,7 +89,7 @@ public class Vinculo {
             System.out.println("Succeeded");
             
             return true;
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | SQLException e) {
             System.out.println("Failed");
             return false;
         }

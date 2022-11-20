@@ -16,8 +16,8 @@ public class Connection {
         } else if (tipoBanco.equals("MySQL")) {
             dataSource = new BasicDataSource();
             dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            dataSource.setUrl("jdbc:mysql://0.0.0.0:3306/device?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
-            dataSource.setUsername("device");
+            dataSource.setUrl("jdbc:mysql://localhost:3306/device?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
+            dataSource.setUsername("root");
             dataSource.setPassword("urubu100");
         } else if (tipoBanco.equals("Azure")) {
             dataSource = new BasicDataSource();

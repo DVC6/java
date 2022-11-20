@@ -25,13 +25,31 @@ public class Formatter {
             memoria.getTotal().doubleValue() / 1073741824
         ).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
-    
+
+    public static Double getConsumoMemoria() {
+        Looca looca = new Looca();
+        Memoria memoria = looca.getMemoria();
+        return new BigDecimal(
+                memoria.getEmUso().doubleValue() / 1073741824
+        ).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+    }
+
     public static Double getTotalDiscos() {
         Looca looca = new Looca();
         DiscoGrupo discos = looca.getGrupoDeDiscos();
-        return discos.getDiscos().stream().mapToDouble(d ->
-                new BigDecimal(d.getTamanho().doubleValue() / 1e+9)
-                .setScale(2, RoundingMode.HALF_EVEN).doubleValue()
+        return discos.getVolumes().stream().mapToDouble(d ->
+                new BigDecimal(d.getTotal().doubleValue() / 1e+9)
+                        .setScale(2, RoundingMode.HALF_EVEN).doubleValue()
         ).sum();
     }
+
+    public static Double getConsumoDiscos() {
+        Looca looca = new Looca();
+        DiscoGrupo discos = looca.getGrupoDeDiscos();
+        return discos.getVolumes().stream().mapToDouble(d ->
+                new BigDecimal(getTotalDiscos() - d.getDisponivel().doubleValue() / 1e+9)
+                        .setScale(2, RoundingMode.HALF_EVEN).doubleValue()
+        ).sum();
+    }
+
 }

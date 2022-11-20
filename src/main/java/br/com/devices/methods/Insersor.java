@@ -28,11 +28,13 @@ public class Insersor {
 
     public void inserirRegistros(LeituraEntity registro) {
         
-        String insertStatement = "INSERT INTO leitura VALUES (?, ?, ?)";
+        String insertStatement = "INSERT INTO leitura VALUES (?, ?, ?, ?)";
         template.update(insertStatement,
                 registro.getDataHoraAtual(),
                 registro.getConsumo(),
-                registro.getFkComponente());
+                registro.getFkComponente(),
+                registro.getConsumoQtd()
+        );
         
         if(ativarSQL){
             adicionarSQL(registro);
@@ -44,10 +46,11 @@ public class Insersor {
 
     public void adicionarSQL(LeituraEntity registro) {
 
-        String insertStatement = "INSERT INTO leitura VALUES (null, ?, ?, ?)";
+        String insertStatement = "INSERT INTO leitura VALUES (null, ?, ?, ?, ?)";
         templateSQL.update(insertStatement,
                 registro.getDataHoraAtual(),
                 registro.getConsumo(),
-                registro.getFkComponente());
+                registro.getFkComponente(),
+                registro.getConsumoQtd());
     }
 }

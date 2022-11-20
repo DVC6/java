@@ -7,13 +7,16 @@ public class LeituraEntity {
     private Integer idLeitura;
     private Date dataHoraAtual;
     private Double consumo;
+
+    private Double consumoQtd;
     private Integer fkComponente;
 
     // CONSTRUTOR
-    public LeituraEntity(Integer idLeitura, Date dataHoraAtual, Double consumo, Integer fkComponente) {
+    public LeituraEntity(Integer idLeitura, Date dataHoraAtual, Double consumo, Double consumoQtd, Integer fkComponente) {
         this.idLeitura = null;
         this.dataHoraAtual = new Date();
         this.consumo = consumo;
+        this.consumoQtd = consumoQtd;
         this.fkComponente = fkComponente;
     }
 
@@ -47,6 +50,10 @@ public class LeituraEntity {
     public void setConsumo(Double consumo) {
         this.consumo = consumo;
     }
+
+    public Double getConsumoQtd() { return consumoQtd; }
+
+    public void setConsumoQtd(Double consumoQtd) { this.consumoQtd = consumoQtd; }
 
     public Integer getFkComponente() {
         return fkComponente;
