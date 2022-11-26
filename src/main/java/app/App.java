@@ -30,6 +30,7 @@ public class App {
         JdbcTemplate connection = new JdbcTemplate(config.getDataSource());
         Looca looca = new Looca();
         Vinculo vinculo = new Vinculo();
+        Integer idTotem = null;
 
         Logger logger = Logger.getLogger("Main");
         try {
@@ -64,8 +65,10 @@ public class App {
 
             switch (modoSelecionado) {
                 case 1:
-                    new FrameLogin().setVisible(true);
-                    menuLoop = false;
+                    if(!vinculo.autoLogin()) {
+                        new FrameLogin().setVisible(true);
+                        menuLoop = false;
+                    } 
                     break;
 ////////////////////////////////////////////////////////////////////////////////                    
                 case 2:
@@ -81,8 +84,8 @@ public class App {
 
                     try {
                         System.out.println("Totem: " + idUnico);
-                        if (vinculo.isAlreadyVinculado()) {
-                            System.out.println("\nTotem já cadastrado..."
+                        if (vinculo.isAlreadyVinculado() != null) {
+                            System.out.println("\nTotem ja cadastrado..."
                                     + "\nRedirecionando...");
 
                         } else {
@@ -92,7 +95,7 @@ public class App {
                                 idHospital = null;
                                 while (nomeHospital == null) {
 
-                                    System.out.println("\nTotem ainda não cadastrado!!!"
+                                    System.out.println("\nTotem ainda nao cadastrado!!!"
                                             + "\nDigite o CNPJ do seu Hospital:");
                                     cnpj = leitorTexto.nextLine();
 
@@ -106,13 +109,13 @@ public class App {
                                         }
                                         
                                         if (buscaHospital.isEmpty()) {
-                                            System.out.println("\nCNPJ não encontrado!!!");
+                                            System.out.println("\nCNPJ nao encontrado!!!");
                                         }
                                     } catch (Exception erro) {
                                         logger.severe(String.format("\nErro ao buscar chave de acesso para cadastro do totem: %s", erro));
                                     }
                                 }
-                                System.out.println("\nSeu hospital é: " + nomeHospital + "? [Y/N]");
+                                System.out.println("\nSeu hospital e: " + nomeHospital + "? [Y/N]");
                                 String confirmacaoEmpresa = leitorTexto.nextLine();
                                 if (confirmacaoEmpresa.equalsIgnoreCase("y")) {
 
@@ -126,9 +129,9 @@ public class App {
                                         localizacao = leitorTexto.nextLine();
                                     }
                                     
-                                    Boolean vinculadoComSucesso = vinculo.Vincular(cnpj, nomeMaquina, localizacao);
+                                    idTotem = vinculo.Vincular(cnpj, nomeMaquina, localizacao);
                                     
-                                    if (vinculadoComSucesso){
+                                    if (idTotem != null){
                                         empresaConfirmada = true;
                                         System.out.println("\nTotem vinculado com sucesso!");
                                     } else {
@@ -146,7 +149,7 @@ public class App {
 
                     //////////Rodar D3V1C6cli
                     D3V1C6cli d3v1c6cli = new D3V1C6cli();
-                    d3v1c6cli.rodarDevice(insersor);
+                    d3v1c6cli.rodarDevice(insersor, idTotem);
 
                     menuLoop = false;
                     break;
@@ -157,7 +160,7 @@ public class App {
                     break;
 ////////////////////////////////////////////////////////////////////////////////                    
                 default:
-                    System.out.println("\nOpção inválida! Digite o número da opção deseja, de acordo com o menu:");
+                    System.out.println("\nOpção invalida! Digite o numero da opção deseja, de acordo com o menu:");
                     break;
             }
         }

@@ -7,16 +7,17 @@ public class LeituraEntity {
     private Integer idLeitura;
     private Date dataHoraAtual;
     private Double consumo;
-
     private Double consumoQtd;
+    private String tipo;
     private Integer fkComponente;
 
     // CONSTRUTOR
-    public LeituraEntity(Integer idLeitura, Date dataHoraAtual, Double consumo, Double consumoQtd, Integer fkComponente) {
+    public LeituraEntity(Integer idLeitura, Date dataHoraAtual, Double consumo, Double consumoQtd, String tipo, Integer fkComponente) {
         this.idLeitura = null;
         this.dataHoraAtual = new Date();
         this.consumo = consumo;
         this.consumoQtd = consumoQtd;
+        this.tipo = tipo;
         this.fkComponente = fkComponente;
     }
 
@@ -63,6 +64,13 @@ public class LeituraEntity {
         this.fkComponente = fkComponente;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     // TO STRING
     @Override

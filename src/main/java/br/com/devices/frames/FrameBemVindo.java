@@ -23,6 +23,9 @@ import org.json.JSONObject;
 
 public class FrameBemVindo extends javax.swing.JFrame {
 
+    
+    private static Integer idTotem;
+    
     Integer contadorRAM = 0;
     Boolean contadorRAMRodando = false;
     Integer contadorCPU = 0;
@@ -48,7 +51,7 @@ public class FrameBemVindo extends javax.swing.JFrame {
         this.ativarSQL = ativarSQL;
     }
 
-    public FrameBemVindo() throws IOException, InterruptedException {
+    public FrameBemVindo(Integer idTotem) throws IOException, InterruptedException {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -79,7 +82,7 @@ public class FrameBemVindo extends javax.swing.JFrame {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                rodarD3V1C6();
+                rodarD3V1C6(idTotem);
                 exibicaoCLI();
                 try {
                     contadorAlerta();
@@ -97,7 +100,7 @@ public class FrameBemVindo extends javax.swing.JFrame {
         timerDisco.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                rodarD3V1C6disco();
+                rodarD3V1C6disco(idTotem);
             }
         }, delay, intervalDisco);
 
@@ -158,11 +161,11 @@ public class FrameBemVindo extends javax.swing.JFrame {
 
     }
 
-    private void rodarD3V1C6() {
+    private void rodarD3V1C6(Integer idTotem) {
 
         insersor.setAtivarSQL(ativarSQL);
-        insersor.inserirRegistros(coletor.coletarRAM());
-        insersor.inserirRegistros(coletor.coletarCPU());
+        insersor.inserirRegistros(coletor.coletarRAM(idTotem));
+        insersor.inserirRegistros(coletor.coletarCPU(idTotem));
         lblExibeRAM.setText(coletor.getAtualRAM() + "%");
         lblExibeCPU.setText(coletor.getAtualCPU() + "%");
         Double conversaoRAM = Double.valueOf(coletor.getAtualRAM());
@@ -187,10 +190,10 @@ public class FrameBemVindo extends javax.swing.JFrame {
         }
     }
 
-    private void rodarD3V1C6disco() {
+    private void rodarD3V1C6disco(Integer idTotem) {
 
         insersor.setAtivarSQL(ativarSQL);
-        insersor.inserirRegistros(coletor.coletarDISCO());
+        insersor.inserirRegistros(coletor.coletarDISCO(idTotem));
         lblExibeDisco.setText(coletor.getAtualDisco() + "%");
         Double conversaoDisco = Double.valueOf(coletor.getAtualDisco());
         if (conversaoDisco > 90.0) {
@@ -447,7 +450,7 @@ public class FrameBemVindo extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new FrameBemVindo().setVisible(true);
+                    new FrameBemVindo(idTotem).setVisible(true);
                 } catch (IOException ex) {
                     Logger.getLogger(FrameBemVindo.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {

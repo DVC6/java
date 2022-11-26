@@ -32,7 +32,7 @@ public class FrameLogin extends javax.swing.JFrame {
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-
+        
         try {
             fh = new FileHandler("../InicialLog.log");
             logger.addHandler(fh);
@@ -41,8 +41,6 @@ public class FrameLogin extends javax.swing.JFrame {
         } catch (Exception e) {
             logger.severe("Erro ao inicializar log em txt");
         }
-
-        autoLogin();
     }
 
     /**
@@ -75,7 +73,7 @@ public class FrameLogin extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/logo.jpg"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/image 2logoRedondin (2).png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -130,7 +128,6 @@ public class FrameLogin extends javax.swing.JFrame {
         jLabel4.setText("jLabel4");
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/key-icon.png"))); // NOI18N
-        jLabel1.setText("jLabel1");
 
         jLabel3.setFont(new java.awt.Font("sansserif", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -153,7 +150,7 @@ public class FrameLogin extends javax.swing.JFrame {
 
         txtId.setBackground(new java.awt.Color(230, 230, 230));
         txtId.setForeground(new java.awt.Color(0, 0, 0));
-        txtId.setToolTipText("Insira seu email");
+        txtId.setToolTipText("Insira um nome identificador para o totem");
         txtId.setBorder(null);
         txtId.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtId.addActionListener(new java.awt.event.ActionListener() {
@@ -185,31 +182,23 @@ public class FrameLogin extends javax.swing.JFrame {
                         .addGap(4, 4, 4))
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(btnVincular, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
-                                        .addComponent(jSeparator2)
-                                        .addComponent(jSeparator3))
-                                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap())
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGap(0, 12, Short.MAX_VALUE)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                        .addComponent(txtChave, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(6, 6, 6))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap())))))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(btnVincular, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                                .addComponent(jSeparator2)
+                                .addComponent(jSeparator3))
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtChave, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 12, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtLocal, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtId, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtLocal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -281,33 +270,13 @@ public class FrameLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // Tentar rodar APOS inicializacao
-    public void autoLogin() {
-        Vinculo vinculo = new Vinculo();
-
-        try {
-            if (vinculo.isAlreadyVinculado()) {
-                logger.info("Inicial - Totem encontrado no banco de dados. Habilitando tela de login.");
-                exibirD3V1C6gui();
-            }
-        } catch (UnknownHostException ex) {
-            logger.severe(String.format("Inicial - Erro ao buscar hostname: %s", ex.toString()));
-        } catch (Exception ex) {
-            logger.severe("Inicial - Erro ao conectar com banco de dados");
-        }
-    }
-
-    private void exibirD3V1C6gui() throws InterruptedException, IOException {
-
-        Thread.sleep(1000);
-        this.setVisible(false);
+    private void exibirD3V1C6gui(Integer idTotem) throws InterruptedException, IOException {
         Thread.sleep(1000);
 
-        FrameBemVindo telaD3V1C6gui = new FrameBemVindo();
+        FrameBemVindo telaD3V1C6gui = new FrameBemVindo(idTotem);
         telaD3V1C6gui.setAtivarSQL(ativarSQL);
         telaD3V1C6gui.setVisible(true);
     }
-
 
     private void txtChaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtChaveActionPerformed
         // TODO add your handling code here:
@@ -317,15 +286,29 @@ public class FrameLogin extends javax.swing.JFrame {
         String cnpj = txtChave.getText();
         String id = txtId.getText();
         String local = txtLocal.getText();
-        
         try {
             if (vinculo.isCamposValidos(cnpj, id, local)) {
-                vinculo.Vincular(cnpj, id, local);
+                Integer idTotem = vinculo.Vincular(cnpj, id, local);
+                if (idTotem != null) {
+                    exibirD3V1C6gui(idTotem);
+                } else {
+                    FramePopUp framePopUp = new FramePopUp();
+                    framePopUp.changeErrorDesc("Chave invalida");
+                    framePopUp.setVisible(true);
+                }
+            } else {
+                FramePopUp framePopUp = new FramePopUp();
+                framePopUp.changeErrorDesc("Preencha todos os campos para prosseguir!");
+                framePopUp.setVisible(true);
             }
         } catch (UnknownHostException e) {
             
         } catch (SocketException e) {
             
+        } catch (IOException e) {
+
+        } catch (InterruptedException e) {
+
         }
 
     }//GEN-LAST:event_btnVincularActionPerformed
@@ -377,11 +360,7 @@ public class FrameLogin extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    new FrameLogin().setVisible(true);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(FrameLogin.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
             }
         });
     }

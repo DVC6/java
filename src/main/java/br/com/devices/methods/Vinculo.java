@@ -3,20 +3,23 @@ package br.com.devices.methods;
 import br.com.devices.db.Conexao;
 import br.com.devices.entities.HospitalEntity;
 import br.com.devices.entities.TotemEntity;
+import br.com.devices.frames.FrameBemVindo;
 import com.github.britooo.looca.api.core.Looca;
 import com.github.britooo.looca.api.group.processador.Processador;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class Vinculo {
 
-    public Boolean Vincular(String cnpj, String nomeMaquina, String local) throws UnknownHostException, SocketException{
+    public Integer Vincular(String cnpj, String nomeMaquina, String local) throws UnknownHostException, SocketException{
 
         Locale.setDefault(Locale.US);
 
@@ -61,41 +64,80 @@ public class Vinculo {
             connectionAzure.execute(insertSQLComponentsAzure);
 
             //MySQL
-            connectionMySql.execute(String.format("INSERT INTO totem " +
-                    "(identificador_unico) VALUES" +
-                    "('%s');", getUniqueIdentifier()));
-
-            List<TotemEntity> totemMySql
-                    = connectionMySql.query("SELECT id_totem FROM totem ORDER BY id_totem DESC LIMIT 1;",
-                    new BeanPropertyRowMapper<>(TotemEntity.class));
-
-            Integer idTotemMySql = totemMySql.get(0).getIdTotem();
-
-            String insertSQLComponentsMySql = String.format("INSERT INTO componente"
-                            + "(total_componente, fktipocomponente, fktotem, modelo) VALUES"
-                            + "(%.2f, %d, %d, '%s')"
-                            + ",(%.2f, %d, %d, '%s')"
-                            + ",(%.2f, %d, %d, '%s');",
-                    Formatter.getTotalCpu().doubleValue(), 1, idTotemMySql, processador.getNome(),
-                    Formatter.getTotalMemoria(), 2, idTotemMySql, "RAM",
-                    Formatter.getTotalDiscos(), 3, idTotemMySql, "Disco");
-
-            connectionMySql.execute(insertSQLComponentsMySql);
+//            connectionMySql.execute(String.format("INSERT INTO totem " +
+//                    "(identificador_unico) VALUES" +
+//                    "('%s');", getUniqueIdentifier()));
+//
+//            List<TotemEntity> totemMySql
+//                    = connectionMySql.query("SELECT id_totem FROM totem ORDER BY id_totem DESC LIMIT 1;",
+//                    new BeanPropertyRowMapper<>(TotemEntity.class));
+//
+//            Integer idTotemMySql = totemMySql.get(0).getIdTotem();
+//
+//            String insertSQLComponentsMySql = String.format("INSERT INTO componente"
+//                            + "(total_componente, fktipocomponente, fktotem, modelo) VALUES"
+//                            + "(%.2f, %d, %d, '%s')"
+//                            + ",(%.2f, %d, %d, '%s')"
+//                            + ",(%.2f, %d, %d, '%s');",
+//                    Formatter.getTotalCpu().doubleValue(), 1, idTotemMySql, processador.getNome(),
+//                    Formatter.getTotalMemoria(), 2, idTotemMySql, "RAM",
+//                    Formatter.getTotalDiscos(), 3, idTotemMySql, "Disco");
+//
+//            connectionMySql.execute(insertSQLComponentsMySql);
 
             System.out.println("Succeeded");
             
-            return true;
+            return idTotemAzure;
         } catch (RuntimeException e) {
             System.out.println("Failed");
-            return false;
+            return null;
         }
     }
 
     public Boolean isCamposValidos(String chave, String id, String local) {
         return !(chave.equals("") || id.equals("") || local.equals(""));
     }
+    
+    private Boolean ativarSQL = false;
 
-    public Boolean isAlreadyVinculado() throws UnknownHostException, SocketException {
+    public Boolean getAtivarSQL() {
+        return ativarSQL;
+    }
+
+    public void setAtivarSQL(Boolean ativarSQL) {
+        this.ativarSQL = ativarSQL;
+    }
+    
+    Logger logger = Logger.getLogger("InicialLogger");
+    
+    private void exibirD3V1C6gui(Integer idTotem) throws InterruptedException, IOException {
+        Thread.sleep(1000);
+
+        FrameBemVindo telaD3V1C6gui = new FrameBemVindo(idTotem);
+        telaD3V1C6gui.setAtivarSQL(ativarSQL);
+        telaD3V1C6gui.setVisible(true);
+    }
+    
+    public Boolean autoLogin() {
+        Vinculo vinculo = new Vinculo();
+
+        try {
+            Integer idTotem = vinculo.isAlreadyVinculado();
+            if (idTotem != null) {
+                logger.info("Inicial - Totem encontrado no banco de dados. Habilitando tela de login.");
+                exibirD3V1C6gui(idTotem);
+                return true;
+            }
+            return false;
+        } catch (UnknownHostException ex) {
+            logger.severe(String.format("Inicial - Erro ao buscar hostname: %s", ex.toString()));
+        } catch (Exception ex) {
+            logger.severe("Inicial - Erro ao conectar com banco de dados");
+        }
+        return false;
+    }
+
+    public static Integer isAlreadyVinculado() throws UnknownHostException, SocketException {
         Conexao conexao = new Conexao();
         JdbcTemplate connection = conexao.getConnectionAzure();
         
@@ -103,11 +145,11 @@ public class Vinculo {
                 = connection.query("SELECT * FROM [dbo].[totem] WHERE identificador_unico = ?",
                         new BeanPropertyRowMapper<>(TotemEntity.class), getUniqueIdentifier());  
         
-        if (totem.size() != 0) return true;
-        else return false;
+        if (totem.size() != 0) return totem.get(0).getIdTotem();
+        else return null;
     }
     
-    public String getUniqueIdentifier() throws UnknownHostException, SocketException {
+    public static String getUniqueIdentifier() throws UnknownHostException, SocketException {
         Looca looca = new Looca();
         Processador processador = looca.getProcessador();
         InetAddress localHost = InetAddress.getLocalHost();

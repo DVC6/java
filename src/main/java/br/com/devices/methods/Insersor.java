@@ -2,7 +2,6 @@ package br.com.devices.methods;
 
 import br.com.devices.db.Connection;
 import br.com.devices.entities.LeituraEntity;
-import java.text.DecimalFormat;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class Insersor {
@@ -23,11 +22,8 @@ public class Insersor {
     public void setAtivarSQL(Boolean ativarSQL) {
         this.ativarSQL = ativarSQL;
     }
-    
-    
 
     public void inserirRegistros(LeituraEntity registro) {
-        
         String insertStatement = "INSERT INTO leitura VALUES (?, ?, ?, ?)";
         template.update(insertStatement,
                 registro.getDataHoraAtual(),

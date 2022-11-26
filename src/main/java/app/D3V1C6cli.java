@@ -7,7 +7,6 @@ import java.net.InetAddress;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import org.json.JSONObject;
@@ -24,7 +23,7 @@ public class D3V1C6cli {
     Logger logger = Logger.getLogger("D3V1C6cli");
     FileHandler fh;
 
-    public void rodarDevice(Insersor insersor) {
+    public void rodarDevice(Insersor insersor, Integer idTotemAzure) {
 
         try {
             fh = new FileHandler("../D3V1C6cliLog.log");
@@ -47,8 +46,8 @@ public class D3V1C6cli {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                insersor.inserirRegistros(coletor.coletarRAM());
-                insersor.inserirRegistros(coletor.coletarCPU());
+                insersor.inserirRegistros(coletor.coletarRAM(idTotemAzure));
+                insersor.inserirRegistros(coletor.coletarCPU(idTotemAzure));
 
                 // Exibição CLI
                 System.out.println(coletor);
@@ -115,7 +114,7 @@ public class D3V1C6cli {
         timerDisco.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                insersor.inserirRegistros(coletor.coletarDISCO());
+                insersor.inserirRegistros(coletor.coletarDISCO(idTotemAzure));
                 Double conversaoDisco = Double.valueOf(coletor.getAtualDisco());
                 if (conversaoDisco > 90.0) {
                     contadorDiscoRodando = true;

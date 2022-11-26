@@ -57,8 +57,8 @@ public class Coletor {
     }
 
     // RAM
-    public LeituraEntity coletarRAM() {
-        LeituraEntity registroRAM = new LeituraEntity(identificarComponente(2));
+    public LeituraEntity coletarRAM(Integer idTotemAzure) {
+        LeituraEntity registroRAM = new LeituraEntity(identificarComponente(2, idTotemAzure));
         BigDecimal consumoRAM = new BigDecimal(looca.getMemoria().getEmUso().doubleValue() / 1073741824).setScale(2, RoundingMode.HALF_EVEN);
         BigDecimal totalRAM = new BigDecimal(looca.getMemoria().getTotal().doubleValue() / 1073741824).setScale(2, RoundingMode.HALF_EVEN);
         BigDecimal percentualConsumoRAM = new BigDecimal((consumoRAM.doubleValue() * 100) / totalRAM.doubleValue()).setScale(2, RoundingMode.HALF_EVEN);
@@ -73,8 +73,8 @@ public class Coletor {
     ;
     
     // CPU
-    public LeituraEntity coletarCPU() {
-        LeituraEntity registroCPU = new LeituraEntity(identificarComponente(1));
+    public LeituraEntity coletarCPU(Integer idTotemAzure) {
+        LeituraEntity registroCPU = new LeituraEntity(identificarComponente(1, idTotemAzure));
         BigDecimal totalCPU = new BigDecimal(looca.getProcessador().getFrequencia() / 1e+9).setScale(2, RoundingMode.HALF_EVEN);
         BigDecimal percentualCPU = new BigDecimal(looca.getProcessador().getUso()).setScale(2, RoundingMode.HALF_EVEN);
         registroCPU.setConsumo(percentualCPU.doubleValue());
@@ -89,7 +89,7 @@ public class Coletor {
     // DISCO
     List<Volume> volumes = grupoDeDiscos.getVolumes();
 
-    public LeituraEntity coletarDISCO() {
+    public LeituraEntity coletarDISCO(Integer idTotemAzure) {
         Double discoDisponivel = 0.0;
         Double discoTotal = 0.0;
         Double discoConsumido = 0.0;
@@ -98,10 +98,7 @@ public class Coletor {
             discoTotal += volume.getTotal().doubleValue();
             discoConsumido += (volume.getTotal().doubleValue() - volume.getDisponivel().doubleValue());
         }
-//        System.out.println(discoDisponivel);
-//        System.out.println(discoTotal);
-//        System.out.println(discoConsumido);
-        LeituraEntity registroDISCO = new LeituraEntity(identificarComponente(3));
+        LeituraEntity registroDISCO = new LeituraEntity(identificarComponente(3, idTotemAzure));
         BigDecimal totalVolume = new BigDecimal(discoTotal.doubleValue() / 1e+9).setScale(0, RoundingMode.HALF_EVEN);
         BigDecimal consumoDisco = new BigDecimal(discoConsumido / 1e+9).setScale(2, RoundingMode.HALF_EVEN);
         BigDecimal percentualDisco = new BigDecimal((consumoDisco.doubleValue() * 100) / totalVolume.doubleValue()).setScale(0, RoundingMode.HALF_EVEN);
@@ -111,27 +108,18 @@ public class Coletor {
         this.atualDiscoQtd = Formatter.getConsumoDiscos().toString();
         this.serverDisco = (totalVolume).toString();
         return registroDISCO;
-//        BigDecimal totalDisco = new BigDecimal(looca.getGrupoDeDiscos().getTamanhoTotal().doubleValue() / 1e+9).setScale(0, RoundingMode.HALF_EVEN);
-//        registroDISCO.setTotal(totalDisco.doubleValue());
-//        this.totalDisco = (totalDisco).toString();
     }
 
-    public Integer identificarComponente(Integer tipoComponente) {
+    public Integer identificarComponente(Integer tipoComponente, Integer idTotemAzure) {
         Integer idComponenteCorreto = null;
 
         try {
-            TotemEntity servidorTeste = new TotemEntity();
-            List<TotemEntity> buscaServidor = template.query("SELECT * FROM totem WHERE nome_maquina = ?",
-                    new BeanPropertyRowMapper<>(TotemEntity.class), InetAddress.getLocalHost().getHostName());
-            for (TotemEntity totem : buscaServidor) {
-                ComponenteEntity componenteTeste = new ComponenteEntity();
-                List<ComponenteEntity> buscaComponente = template.query("SELECT * FROM componente WHERE fkTotem = ? AND fktipocomponente = ?",
-                        new BeanPropertyRowMapper<>(ComponenteEntity.class), totem.getIdTotem(), tipoComponente);
-                for (ComponenteEntity componente : buscaComponente) {
-                    idComponenteCorreto = componente.getIdComponente();
-                }
-            }
-        } catch (UnknownHostException ex) {
+            List<ComponenteEntity> componentes = 
+                template.query("SELECT * FROM componente WHERE fktotem = ? AND fktipocomponente = ?", 
+                new BeanPropertyRowMapper<>(ComponenteEntity.class), idTotemAzure, tipoComponente);
+            
+            idComponenteCorreto = componentes.get(0).getIdComponente();
+        } catch (RuntimeException ex) {
             logger.severe(String.format("Erro ao identificar componente: %s", ex));
         }
         return idComponenteCorreto;
