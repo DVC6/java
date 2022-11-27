@@ -41,7 +41,7 @@ public class FrameBemVindo extends javax.swing.JFrame {
     Logger logger = Logger.getLogger("D3V1C6");
     FileHandler fh;
 
-    private Boolean ativarSQL = false;
+    private Boolean ativarSQL = true;
 
     public Boolean getAtivarSQL() {
         return ativarSQL;

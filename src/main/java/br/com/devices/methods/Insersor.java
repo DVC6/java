@@ -1,5 +1,6 @@
 package br.com.devices.methods;
 
+import br.com.devices.db.Conexao;
 import br.com.devices.db.Connection;
 import br.com.devices.entities.LeituraEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,7 +14,7 @@ public class Insersor {
     public Insersor() {
     }
     
-    private Boolean ativarSQL = false;
+    private Boolean ativarSQL = true;
 
     public Boolean getAtivarSQL() {
         return ativarSQL;
@@ -37,16 +38,18 @@ public class Insersor {
         }
     }
 
-    Connection configSQL = new Connection("MySQL");
-    JdbcTemplate templateSQL = new JdbcTemplate(configSQL.getDataSource());
+    Conexao conexao = new Conexao();
+    JdbcTemplate connectionMySql = conexao.getConnectionMySQL();
 
     public void adicionarSQL(LeituraEntity registro) {
 
-        String insertStatement = "INSERT INTO leitura VALUES (null, ?, ?, ?, ?)";
-        templateSQL.update(insertStatement,
+        String insertStatement = "INSERT INTO leitura (data_hora_atual, consumo, fkcomponente, consumo_qtd) VALUES (?, ?, ?, ?)";
+
+        connectionMySql.update(insertStatement,
                 registro.getDataHoraAtual(),
                 registro.getConsumo(),
                 registro.getFkComponente(),
                 registro.getConsumoQtd());
+        System.out.println(registro.getDataHoraAtual());
     }
 }

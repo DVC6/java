@@ -87,7 +87,7 @@ public class App {
                         if (vinculo.isAlreadyVinculado() != null) {
                             System.out.println("\nTotem ja cadastrado..."
                                     + "\nRedirecionando...");
-
+                            idTotem = vinculo.isAlreadyVinculado();
                         } else {
                             Boolean empresaConfirmada = false;
                             while (!empresaConfirmada) {

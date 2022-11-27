@@ -27,8 +27,12 @@ public class Conexao {
         BasicDataSource dataSourceMySQL = new BasicDataSource();
 
         dataSourceMySQL.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        //Docker
         dataSourceMySQL.setUrl("jdbc:mysql://db:3306/device?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
         dataSourceMySQL.setUsername("device_user");
+        //Local
+//        dataSourceMySQL.setUrl("jdbc:mysql://localhost:3306/devices_local?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
+//        dataSourceMySQL.setUsername("device");
         dataSourceMySQL.setPassword("urubu100");
 
         connectionMySQL = new JdbcTemplate(dataSourceMySQL);

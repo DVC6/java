@@ -1,11 +1,12 @@
 package br.com.devices.entities;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class LeituraEntity {
 
     private Integer idLeitura;
-    private Date dataHoraAtual;
+    private LocalDateTime dataHoraAtual;
     private Double consumo;
     private Double consumoQtd;
     private String tipo;
@@ -14,7 +15,7 @@ public class LeituraEntity {
     // CONSTRUTOR
     public LeituraEntity(Integer idLeitura, Date dataHoraAtual, Double consumo, Double consumoQtd, String tipo, Integer fkComponente) {
         this.idLeitura = null;
-        this.dataHoraAtual = new Date();
+        this.dataHoraAtual = LocalDateTime.now();
         this.consumo = consumo;
         this.consumoQtd = consumoQtd;
         this.tipo = tipo;
@@ -23,7 +24,7 @@ public class LeituraEntity {
 
     public LeituraEntity(Integer fkComponente) {
         this.idLeitura = null;
-        this.dataHoraAtual = new Date();
+        this.dataHoraAtual = LocalDateTime.now();
         this.fkComponente = fkComponente;
     }
 
@@ -36,11 +37,11 @@ public class LeituraEntity {
         this.idLeitura = idLeitura;
     }
 
-    public Date getDataHoraAtual() {
+    public LocalDateTime getDataHoraAtual() {
         return dataHoraAtual;
     }
 
-    public void setDataHoraAtual(Date dataHoraAtual) {
+    public void setDataHoraAtual(LocalDateTime dataHoraAtual) {
         this.dataHoraAtual = dataHoraAtual;
     }
 
