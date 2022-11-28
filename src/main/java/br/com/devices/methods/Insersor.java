@@ -46,10 +46,9 @@ public class Insersor {
         String insertStatement = "INSERT INTO leitura (data_hora_atual, consumo, fkcomponente, consumo_qtd) VALUES (?, ?, ?, ?)";
 
         connectionMySql.update(insertStatement,
-                registro.getDataHoraAtual(),
+                registro.getDataHoraAtual().toString(),
                 registro.getConsumo(),
                 registro.getFkComponente(),
                 registro.getConsumoQtd());
-        System.out.println(registro.getDataHoraAtual());
     }
 }

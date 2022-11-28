@@ -137,6 +137,7 @@ public class Vinculo {
             Integer idTotem = vinculo.isAlreadyVinculado();
             if (idTotem != null) {
                 logger.info("Inicial - Totem encontrado no banco de dados. Habilitando tela de login.");
+                atualizarComponentes(idTotem);
                 exibirD3V1C6gui(idTotem);
                 return true;
             }
@@ -160,6 +161,48 @@ public class Vinculo {
         if (totem.size() != 0) return totem.get(0).getIdTotem();
         else return null;
     }
+
+    public static void atualizarComponentes(Integer idTotem) {
+        Conexao conexao = new Conexao();
+        JdbcTemplate connection = conexao.getConnectionAzure();
+        Looca looca = new Looca();
+        Processador p = looca.getProcessador();
+
+        List<ComponenteEntity> componentes
+                = connection.query(
+                    "SELECT * FROM [dbo].[componente] WHERE fktotem = ? ORDER BY fktipocomponente",
+                    new BeanPropertyRowMapper<>(ComponenteEntity.class), idTotem
+                );
+
+        if (
+            !(componentes.get(0).getModelo().equals(p.getNome())) ||
+            !(componentes.get(0).getTotalComponente().equals(Formatter.getTotalCpu().toString()))
+        ) {
+            connection.update(
+                "UPDATE [dbo].[componente] SET modelo = ?, total_componente = ? WHERE fktotem = ? AND fktipocomponente = 1",
+                p.getNome(), Formatter.getTotalCpu(), idTotem
+            );
+        }
+
+        if (
+            componentes.get(1).getTotalComponente().equals(Formatter.getTotalMemoria().toString())
+        ) {
+            connection.update(
+                "UPDATE [dbo].[componente] SET total_componente = ? WHERE fktotem = ? AND fktipocomponente = 2",
+                Formatter.getTotalMemoria(), idTotem
+            );
+        }
+
+        if (
+            componentes.get(0).getTotalComponente().equals(Formatter.getTotalDiscos().toString())
+        ) {
+            connection.update(
+                "UPDATE [dbo].[componente] SET total_componente = ? WHERE fktotem = ? AND fktipocomponente = 3",
+                Formatter.getTotalDiscos(), idTotem
+            );
+        }
+    }
+
     
     public static String getUniqueIdentifier() throws UnknownHostException, SocketException {
         Looca looca = new Looca();

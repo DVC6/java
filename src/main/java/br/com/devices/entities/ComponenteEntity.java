@@ -3,20 +3,20 @@ package br.com.devices.entities;
 public class ComponenteEntity {
 
     private Integer idComponente;
+    private String modelo;
     private String totalComponente;
     private Integer fkTipoComponente;
     private Integer fkTotem;
-    private Integer fkMetricas;
 
     public ComponenteEntity() {
     }
 
-    public ComponenteEntity(Integer idComponente, String totalComponente, Integer fkTipoComponente, Integer fkTotem, Integer fkMetricas) {
+    public ComponenteEntity(Integer idComponente, String modelo, String totalComponente, Integer fkTipoComponente, Integer fkTotem) {
         this.idComponente = idComponente;
+        this.modelo = modelo;
         this.totalComponente = totalComponente;
         this.fkTipoComponente = fkTipoComponente;
         this.fkTotem = fkTotem;
-        this.fkMetricas = fkMetricas;
     }
 
     public Integer getIdComponente() {
@@ -51,12 +51,10 @@ public class ComponenteEntity {
         this.fkTotem = fkTotem;
     }
 
-    public Integer getFkMetricas() {
-        return fkMetricas;
-    }
+    public String getModelo() { return modelo; }
 
-    public void setFkMetricas(Integer fkMetricas) {
-        this.fkMetricas = fkMetricas;
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
     }
 
     @Override
@@ -66,8 +64,8 @@ public class ComponenteEntity {
                 + "\ntotalComponente: %s"
                 + "\nfkTipoComponente: %d"
                 + "\nfkTotem: %d"
-                + "\nfkMetricas: %d",
-                idComponente,totalComponente,fkTipoComponente,fkTotem,fkMetricas);
+                + "\nmodelo: %s",
+                idComponente,totalComponente,fkTipoComponente,fkTotem,modelo);
     }
     
     

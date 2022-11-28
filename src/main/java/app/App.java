@@ -2,20 +2,15 @@ package app;
 
 import br.com.devices.db.Connection;
 import br.com.devices.entities.HospitalEntity;
-import br.com.devices.entities.TotemEntity;
 import br.com.devices.frames.FrameLogin;
 import br.com.devices.methods.Insersor;
 import br.com.devices.methods.Vinculo;
 import com.github.britooo.looca.api.core.Looca;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -88,6 +83,7 @@ public class App {
                             System.out.println("\nTotem ja cadastrado..."
                                     + "\nRedirecionando...");
                             idTotem = vinculo.isAlreadyVinculado();
+                            Vinculo.atualizarComponentes(idTotem);
                         } else {
                             Boolean empresaConfirmada = false;
                             while (!empresaConfirmada) {
