@@ -136,7 +136,7 @@ public class Vinculo {
         try {
             Integer idTotem = vinculo.isAlreadyVinculado();
             if (idTotem != null) {
-                logger.info("Inicial - Totem encontrado no banco de dados. Habilitando tela de login.");
+                logger.info("Inicial - Totem encontrado no banco de dados. Iniciando coleta de dados.");
                 atualizarComponentes(idTotem);
                 exibirD3V1C6gui(idTotem);
                 return true;

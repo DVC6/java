@@ -89,19 +89,17 @@ public class D3V1C6cli {
                         contadorDisco = 0;
                     }
 
-                    String nomeServidor = InetAddress.getLocalHost().getHostName();
-
-                    if (contadorRAM == 10) {
+                    if (contadorRAM == 4) {
                         json.put("text", "Alerta no totem: " + Vinculo.getNomeTotem()
                                 + "\nAlerta de RAM :heavy_exclamation_mark: // Uso de processador acima de 90% :heavy_exclamation_mark:");
                         Slack.sendMessage(json);
                     }
-                    if (contadorCPU == 10) {
+                    if (contadorCPU == 4) {
                         json.put("text", "Alerta no totem: " + Vinculo.getNomeTotem()
                                 + "\nAlerta de CPU :heavy_exclamation_mark: // Uso de RAM acima de 90% :heavy_exclamation_mark:");
                         Slack.sendMessage(json);
                     }
-                    if (contadorDisco == 10) {
+                    if (contadorDisco == 4) {
                         json.put("text", "Alerta no totem: " + Vinculo.getNomeTotem()
                                 + "\nAlerta de Disco :heavy_exclamation_mark: // Uso de volume acima de 90% da capacidade total :heavy_exclamation_mark:");
                         Slack.sendMessage(json);
