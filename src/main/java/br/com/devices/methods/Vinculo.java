@@ -218,4 +218,16 @@ public class Vinculo {
 
         return String.format(String.join("-", hexadecimal) + processador.getId());
     }
+
+    public static String getNomeTotem() throws UnknownHostException, SocketException{
+        Conexao conexao = new Conexao();
+        JdbcTemplate connection = conexao.getConnectionAzure();
+
+        List<TotemEntity> nomeTotem = connection.query(
+                "SELECT * FROM [dbo].[totem] WHERE identificador_unico = ?",
+                new BeanPropertyRowMapper<>(TotemEntity.class), getUniqueIdentifier()
+            );
+
+        return nomeTotem.get(0).getNomeMaquina();
+    }
 }

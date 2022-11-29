@@ -1,5 +1,6 @@
 package app;
 
+import br.com.devices.db.Conexao;
 import br.com.devices.methods.Coletor;
 import br.com.devices.methods.Insersor;
 import java.io.IOException;
@@ -9,10 +10,16 @@ import java.util.TimerTask;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+
+import br.com.devices.methods.Slack;
+import br.com.devices.methods.Vinculo;
 import org.json.JSONObject;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public class D3V1C6cli {
 
+    Conexao conexao = new Conexao();
+    JdbcTemplate conn = conexao.getConnectionAzure();
     Integer contadorRAM = 0;
     Boolean contadorRAMRodando = false;
     Integer contadorCPU = 0;
@@ -84,27 +91,26 @@ public class D3V1C6cli {
 
                     String nomeServidor = InetAddress.getLocalHost().getHostName();
 
-                    if (contadorRAM == 36) {
-                        json.put("text", "Alerta no servidor: " + nomeServidor
-                                + "\nAlerta de RAM :heavy_exclamation_mark: // Possível Atividade Suspeita :heavy_exclamation_mark:");
-//                        Slack.enviarMensagem(json);
+                    if (contadorRAM == 10) {
+                        json.put("text", "Alerta no totem: " + Vinculo.getNomeTotem()
+                                + "\nAlerta de RAM :heavy_exclamation_mark: // Uso de processador acima de 90% :heavy_exclamation_mark:");
+                        Slack.sendMessage(json);
                     }
-                    if (contadorCPU == 36) {
-                        json.put("text", "Alerta no servidor: " + nomeServidor
-                                + "\nAlerta de CPU :heavy_exclamation_mark: // Possível Atividade Suspeita :heavy_exclamation_mark:");
-//                        Slack.enviarMensagem(json);
+                    if (contadorCPU == 10) {
+                        json.put("text", "Alerta no totem: " + Vinculo.getNomeTotem()
+                                + "\nAlerta de CPU :heavy_exclamation_mark: // Uso de RAM acima de 90% :heavy_exclamation_mark:");
+                        Slack.sendMessage(json);
                     }
-                    if (contadorDisco == 36) {
-                        json.put("text", "Alerta no servidor: " + nomeServidor
+                    if (contadorDisco == 10) {
+                        json.put("text", "Alerta no totem: " + Vinculo.getNomeTotem()
                                 + "\nAlerta de Disco :heavy_exclamation_mark: // Uso de volume acima de 90% da capacidade total :heavy_exclamation_mark:");
-//                        Slack.enviarMensagem(json);
+                        Slack.sendMessage(json);
                     }
                 } catch (IOException ex) {
                     logger.severe("Erro ao verificar contadores.");
+                } catch (InterruptedException ex) {
+                    logger.severe("Erro ao verificar contadores.");
                 }
-//                } catch (InterruptedException ex) {
-//                    logger.severe("Erro ao verificar contadores.");
-//                }
 
             }
         }, delay, interval);
@@ -124,5 +130,4 @@ public class D3V1C6cli {
             }
         }, delay, intervalDisco);
     }
-
 }

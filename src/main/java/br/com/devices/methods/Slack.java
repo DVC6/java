@@ -11,15 +11,15 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 public class Slack {
-
+    private static HttpClient client = HttpClient.newHttpClient();
+    private static final String URL = "https://hooks.slack.com/services/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";
     private static FileHandler fh;
     private static Logger logger = Logger.getLogger("SlackLogger");
 
-    private static HttpClient client = HttpClient.newHttpClient();
-    private static final String URL = "https://hooks.slack.com/services/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";
-
-    public static void sendMessage(JSONObject content) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder(URI.create(URL))
+    public static void sendMessage(JSONObject content) throws IOException, InterruptedException{
+        HttpRequest request;
+        request = HttpRequest.newBuilder(
+                        URI.create(URL))
                 .header("accept", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(content.toString()))
                 .build();
@@ -39,7 +39,8 @@ public class Slack {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         logger.info(String.format("Slack - Mensagem Enviada, Respostas: StatusCode: %s Body: ", response.statusCode(), response.body()));
+
         System.out.println(String.format("Status: %s", response.statusCode()));
-        System.out.println(String.format("Responde: %s", response.body()));
+        System.out.println(String.format("Response: %s", response.body()));
     }
 }
