@@ -13,7 +13,6 @@ br\com\devices\frames\FrameBemVindo$3.class
 br\com\devices\frames\FrameLogin$2.class
 app\D3V1C6cli$2.class
 br\com\devices\entities\LeituraEntity.class
-br\com\devices\methods\TesteVinculo.class
 br\com\devices\frames\FrameLogin$4.class
 br\com\devices\db\Connection.class
 br\com\devices\frames\FrameBemVindo$1.class
