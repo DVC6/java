@@ -29,8 +29,6 @@ public class Vinculo {
 
         Conexao conexao = new Conexao();
         JdbcTemplate connectionAzure = conexao.getConnectionAzure();
-        JdbcTemplate connectionMySql = conexao.getConnectionMySQL();
-
         
         List<HospitalEntity> hospital
                 = connectionAzure.query("SELECT * FROM [dbo].[hospital] WHERE cnpj = ?",
@@ -64,42 +62,8 @@ public class Vinculo {
 
             connectionAzure.execute(insertSQLComponentsAzure);
 
-            List<ComponenteEntity> componentes = connectionAzure.query(
-                    "SELECT * FROM [dbo].[componente] WHERE fktotem = ? ORDER BY fktipocomponente",
-                    new BeanPropertyRowMapper<>(ComponenteEntity.class), idTotemAzure
-            );
-
             //MySQL
-            try {
-                System.out.println(String.format("INSERT INTO totem " +
-                        "(id_totem, identificador_unico) VALUES" +
-                        "(%d, '%s');", idTotemAzure, getUniqueIdentifier()));
-
-                connectionMySql.execute(String.format("INSERT INTO totem " +
-                        "(id_totem, identificador_unico) VALUES" +
-                        "(%d, '%s');", idTotemAzure, getUniqueIdentifier()));
-
-                List<TotemEntity> totemMySql
-                        = connectionMySql.query("SELECT id_totem FROM totem ORDER BY id_totem DESC LIMIT 1;",
-                        new BeanPropertyRowMapper<>(TotemEntity.class));
-
-                Integer idTotemMySql = totemMySql.get(0).getIdTotem();
-
-                String insertSQLComponentsMySql = String.format("INSERT INTO componente"
-                                + "(id_componente, total_componente, fktipocomponente, fktotem, modelo) VALUES"
-                                + "(%d, %.2f, %d, %d, '%s')"
-                                + ",(%d, %.2f, %d, %d, '%s')"
-                                + ",(%d, %.2f, %d, %d, '%s');",
-                        componentes.get(0).getIdComponente(), Formatter.getTotalCpu().doubleValue(), 1, idTotemMySql, processador.getNome(),
-                        componentes.get(1).getIdComponente(), Formatter.getTotalMemoria(), 2, idTotemMySql, "RAM",
-                        componentes.get(2).getIdComponente(), Formatter.getTotalDiscos(), 3, idTotemMySql, "Disco");
-
-                System.out.println(insertSQLComponentsMySql);
-
-                connectionMySql.execute(insertSQLComponentsMySql);
-            } catch (RuntimeException e) {
-                System.out.println(e);
-            }
+            vincularMySql(idTotemAzure);
 
             System.out.println("Succeeded");
             
@@ -107,6 +71,50 @@ public class Vinculo {
         } catch (RuntimeException e) {
             System.out.println(e);
             return null;
+        }
+    }
+
+    public Boolean vincularMySql(Integer idTotem) throws UnknownHostException, SocketException{
+
+        Conexao conexao = new Conexao();
+        JdbcTemplate connectionMySql = conexao.getConnectionMySQL();
+        JdbcTemplate connectionAzure = conexao.getConnectionAzure();
+
+        Looca looca = new Looca();
+        Processador processador = looca.getProcessador();
+
+        try {
+
+            List<ComponenteEntity> componentes = connectionAzure.query(
+                    "SELECT * FROM [dbo].[componente] WHERE fktotem = ? ORDER BY fktipocomponente",
+                    new BeanPropertyRowMapper<>(ComponenteEntity.class), idTotem
+            );
+
+            connectionMySql.execute(String.format("INSERT INTO totem " +
+                    "(id_totem, identificador_unico) VALUES" +
+                    "(%d, '%s');", idTotem, getUniqueIdentifier()));
+
+            List<TotemEntity> totemMySql
+                    = connectionMySql.query("SELECT id_totem FROM totem ORDER BY id_totem DESC LIMIT 1;",
+                    new BeanPropertyRowMapper<>(TotemEntity.class));
+
+            Integer idTotemMySql = totemMySql.get(0).getIdTotem();
+
+            String insertSQLComponentsMySql = String.format("INSERT INTO componente"
+                            + "(id_componente, total_componente, fktipocomponente, fktotem, modelo) VALUES"
+                            + "(%d, %.2f, %d, %d, '%s')"
+                            + ",(%d, %.2f, %d, %d, '%s')"
+                            + ",(%d, %.2f, %d, %d, '%s');",
+                    componentes.get(0).getIdComponente(), Formatter.getTotalCpu().doubleValue(), 1, idTotemMySql, processador.getNome(),
+                    componentes.get(1).getIdComponente(), Formatter.getTotalMemoria(), 2, idTotemMySql, "RAM",
+                    componentes.get(2).getIdComponente(), Formatter.getTotalDiscos(), 3, idTotemMySql, "Disco");
+
+            connectionMySql.execute(insertSQLComponentsMySql);
+
+            return true;
+        } catch (RuntimeException e) {
+            System.out.println("Totem e componentes já persistidos localmente.");
+            return false;
         }
     }
 
@@ -142,6 +150,7 @@ public class Vinculo {
             if (idTotem != null) {
                 logger.info("Inicial - Totem encontrado no banco de dados. Iniciando coleta de dados.");
                 atualizarComponentes(idTotem);
+                vincularMySql(idTotem);
                 exibirD3V1C6gui(idTotem);
                 return true;
             }
