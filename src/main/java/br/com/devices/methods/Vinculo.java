@@ -70,32 +70,36 @@ public class Vinculo {
             );
 
             //MySQL
-            System.out.println(String.format("INSERT INTO totem " +
-                    "(id_totem, identificador_unico) VALUES" +
-                    "(%d, '%s');", idTotemAzure, getUniqueIdentifier()));
+            try {
+                System.out.println(String.format("INSERT INTO totem " +
+                        "(id_totem, identificador_unico) VALUES" +
+                        "(%d, '%s');", idTotemAzure, getUniqueIdentifier()));
 
-            connectionMySql.execute(String.format("INSERT INTO totem " +
-                    "(id_totem, identificador_unico) VALUES" +
-                    "(%d, '%s');", idTotemAzure, getUniqueIdentifier()));
+                connectionMySql.execute(String.format("INSERT INTO totem " +
+                        "(id_totem, identificador_unico) VALUES" +
+                        "(%d, '%s');", idTotemAzure, getUniqueIdentifier()));
 
-            List<TotemEntity> totemMySql
-                    = connectionMySql.query("SELECT id_totem FROM totem ORDER BY id_totem DESC LIMIT 1;",
-                    new BeanPropertyRowMapper<>(TotemEntity.class));
+                List<TotemEntity> totemMySql
+                        = connectionMySql.query("SELECT id_totem FROM totem ORDER BY id_totem DESC LIMIT 1;",
+                        new BeanPropertyRowMapper<>(TotemEntity.class));
 
-            Integer idTotemMySql = totemMySql.get(0).getIdTotem();
+                Integer idTotemMySql = totemMySql.get(0).getIdTotem();
 
-            String insertSQLComponentsMySql = String.format("INSERT INTO componente"
-                            + "(id_componente, total_componente, fktipocomponente, fktotem, modelo) VALUES"
-                            + "(%d, %.2f, %d, %d, '%s')"
-                            + ",(%d, %.2f, %d, %d, '%s')"
-                            + ",(%d, %.2f, %d, %d, '%s');",
-                    componentes.get(0).getIdComponente(), Formatter.getTotalCpu().doubleValue(), 1, idTotemMySql, processador.getNome(),
-                    componentes.get(1).getIdComponente(), Formatter.getTotalMemoria(), 2, idTotemMySql, "RAM",
-                    componentes.get(2).getIdComponente(), Formatter.getTotalDiscos(), 3, idTotemMySql, "Disco");
+                String insertSQLComponentsMySql = String.format("INSERT INTO componente"
+                                + "(id_componente, total_componente, fktipocomponente, fktotem, modelo) VALUES"
+                                + "(%d, %.2f, %d, %d, '%s')"
+                                + ",(%d, %.2f, %d, %d, '%s')"
+                                + ",(%d, %.2f, %d, %d, '%s');",
+                        componentes.get(0).getIdComponente(), Formatter.getTotalCpu().doubleValue(), 1, idTotemMySql, processador.getNome(),
+                        componentes.get(1).getIdComponente(), Formatter.getTotalMemoria(), 2, idTotemMySql, "RAM",
+                        componentes.get(2).getIdComponente(), Formatter.getTotalDiscos(), 3, idTotemMySql, "Disco");
 
-            System.out.println(insertSQLComponentsMySql);
+                System.out.println(insertSQLComponentsMySql);
 
-            connectionMySql.execute(insertSQLComponentsMySql);
+                connectionMySql.execute(insertSQLComponentsMySql);
+            } catch (RuntimeException e) {
+                System.out.println(e);
+            }
 
             System.out.println("Succeeded");
             

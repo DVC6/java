@@ -18,7 +18,7 @@ public class FrameLogin extends javax.swing.JFrame {
     Logger logger = Logger.getLogger("InicialLogger");
     Vinculo vinculo = new Vinculo();
 
-    private Boolean ativarSQL = false;
+    private Boolean ativarSQL = true;
 
     public Boolean getAtivarSQL() {
         return ativarSQL;
@@ -290,6 +290,7 @@ public class FrameLogin extends javax.swing.JFrame {
         Thread.sleep(1000);
 
         FrameBemVindo telaD3V1C6gui = new FrameBemVindo(idTotem);
+        this.setVisible(false);
         telaD3V1C6gui.setAtivarSQL(ativarSQL);
         telaD3V1C6gui.setVisible(true);
     }
