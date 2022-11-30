@@ -74,7 +74,7 @@ public class Vinculo {
         }
     }
 
-    public Boolean vincularMySql(Integer idTotem) throws UnknownHostException, SocketException{
+    public static Boolean vincularMySql(Integer idTotem) throws UnknownHostException, SocketException{
 
         Conexao conexao = new Conexao();
         JdbcTemplate connectionMySql = conexao.getConnectionMySQL();
@@ -150,7 +150,6 @@ public class Vinculo {
             if (idTotem != null) {
                 logger.info("Inicial - Totem encontrado no banco de dados. Iniciando coleta de dados.");
                 atualizarComponentes(idTotem);
-                vincularMySql(idTotem);
                 exibirD3V1C6gui(idTotem);
                 return true;
             }
@@ -171,7 +170,10 @@ public class Vinculo {
                 = connection.query("SELECT * FROM [dbo].[totem] WHERE identificador_unico = ?",
                         new BeanPropertyRowMapper<>(TotemEntity.class), getUniqueIdentifier());  
         
-        if (totem.size() != 0) return totem.get(0).getIdTotem();
+        if (totem.size() != 0) {
+            vincularMySql(totem.get(0).getIdTotem());
+            return totem.get(0).getIdTotem();
+        }
         else return null;
     }
 
