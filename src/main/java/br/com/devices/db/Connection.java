@@ -18,7 +18,7 @@ public class Connection {
             dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
             //Docker
             dataSource.setUrl("jdbc:mysql://db:3306/device?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
-            dataSource.setUsername("device_user");
+            dataSource.setUsername("root");
             //Local
 //            dataSource.setUrl("jdbc:mysql://localhost:3306/devices_local?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
 //            dataSource.setUsername("device");

@@ -29,7 +29,7 @@ public class Conexao {
         dataSourceMySQL.setDriverClassName("com.mysql.cj.jdbc.Driver");
 //        Docker
         dataSourceMySQL.setUrl("jdbc:mysql://db:3306/device?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
-        dataSourceMySQL.setUsername("device_user");
+        dataSourceMySQL.setUsername("root");
 //        //Local
 //        dataSourceMySQL.setUrl("jdbc:mysql://localhost:3306/devices_local?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC");
 //        dataSourceMySQL.setUsername("device");
