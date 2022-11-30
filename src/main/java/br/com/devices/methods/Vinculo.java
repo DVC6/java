@@ -84,7 +84,7 @@ public class Vinculo {
         Processador processador = looca.getProcessador();
 
         List<ComponenteEntity> compsMysql = connectionMySql.query(
-                "SELECT * FROM componete WHERE fktotem = ?",
+                "SELECT * FROM componente WHERE fktotem = ?",
                 new BeanPropertyRowMapper<>(ComponenteEntity.class), idTotem
         );
 
