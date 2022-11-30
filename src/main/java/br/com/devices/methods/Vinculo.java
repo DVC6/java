@@ -74,7 +74,7 @@ public class Vinculo {
         }
     }
 
-    public static Boolean vincularMySql(Integer idTotem) throws UnknownHostException, SocketException{
+    public static void vincularMySql(Integer idTotem) throws UnknownHostException, SocketException{
 
         Conexao conexao = new Conexao();
         JdbcTemplate connectionMySql = conexao.getConnectionMySQL();
@@ -83,8 +83,12 @@ public class Vinculo {
         Looca looca = new Looca();
         Processador processador = looca.getProcessador();
 
-        try {
+        List<ComponenteEntity> compsMysql = connectionMySql.query(
+                "SELECT * FROM componete WHERE fktotem = ?",
+                new BeanPropertyRowMapper<>(ComponenteEntity.class), idTotem
+        );
 
+        if (compsMysql.size() == 0) {
             List<ComponenteEntity> componentes = connectionAzure.query(
                     "SELECT * FROM [dbo].[componente] WHERE fktotem = ? ORDER BY fktipocomponente",
                     new BeanPropertyRowMapper<>(ComponenteEntity.class), idTotem
@@ -110,11 +114,8 @@ public class Vinculo {
                     componentes.get(2).getIdComponente(), Formatter.getTotalDiscos(), 3, idTotemMySql, "Disco");
 
             connectionMySql.execute(insertSQLComponentsMySql);
-
-            return true;
-        } catch (RuntimeException e) {
+        } else {
             System.out.println("Totem e componentes já persistidos localmente.");
-            return false;
         }
     }
 
